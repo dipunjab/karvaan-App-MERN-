@@ -229,7 +229,7 @@ const getCurrentUser = asyncHandler(async (req,res) => {
 const updateAccountDetails = asyncHandler(async (req,res) => {
    
     const {fullname, email} = req.body
-    if (!fullname || !email) {
+    if (!(fullname || email)) {
         throw new ApiError(400, "All Fields are Required")
     }
 
@@ -358,7 +358,7 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
                 },
                 isSubscribed: {
                     $cond: {
-                        if: {$in: [req.user?._id, "subscribers.subscriber"]},
+                        if: {$in: [req.user?._id, "$subscribers.subscriber"]},
                         then: true,
                         else: false
                     }
