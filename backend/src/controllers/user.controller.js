@@ -2,7 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
-import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
 
@@ -200,8 +200,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
 });
 
-const changeCurrentPassword = asyncHandler(async (req,res) => {
-    const {oldPassword, newPassword} = req.body;
+const changeCurrentPassword = asyncHandler(async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
 
     const user = await User.findById(req.user._id)
     const isPasswordCorrect = user.isPasswordCorrect(oldPassword)
@@ -210,118 +210,169 @@ const changeCurrentPassword = asyncHandler(async (req,res) => {
     }
 
     user.password = newPassword
-    await user.save({validateBeforeSave: false})
+    await user.save({ validateBeforeSave: false })
 
     return res
         .status(200)
         .json(new ApiResponse(200, {}, "Password Changed Successfully"))
 });
 
-const getCurrentUser = asyncHandler(async (req,res) => {
-   return res
+const getCurrentUser = asyncHandler(async (req, res) => {
+    return res
         .status(200)
         .json(new ApiResponse(
             200,
-             req.user,
+            req.user,
             "Current user fetched Successfully"))
 });
 
-const updateAccountDetails = asyncHandler(async (req,res) => {
-   
-    const {fullname, email} = req.body
+const updateAccountDetails = asyncHandler(async (req, res) => {
+
+    const { fullname, email } = req.body
     if (!(fullname || email)) {
         throw new ApiError(400, "All Fields are Required")
     }
 
     const user = await User.findByIdAndUpdate(
-            req.user?._id,
-            {
-                $set: {
-                    fullname: fullname,
-                    email: email
-                }
-            },
-            {
-                new: true
+        req.user?._id,
+        {
+            $set: {
+                fullname: fullname,
+                email: email
             }
-        ).select("-password")
-    
+        },
+        {
+            new: true
+        }
+    ).select("-password")
+
     return res
         .status(200)
         .json(new ApiResponse(
             200,
-             user,
+            user,
             "Account Details Updated Successfully"))
 });
 
-//TODO: Delete old Avatar from cloudinary
-const updateUserAvatar = asyncHandler(async (req,res) => {
-   const avatarLocalPath = req.file?.path
+const updateUserAvatar = asyncHandler(async (req, res) => {
+    const avatarLocalPath = req.file?.path
 
-   if (!avatarLocalPath) {
-    throw new ApiError(400, "Avatar file is missing")
-   }
-
-   const avatar = await uploadOnCloudinary(avatarLocalPath)
-   if (!avatar.url) {
-    throw new ApiError(400, "Erro while uploading Avatar file")
-   }
-    
-   const user = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-        $set: {
-            avatar: avatar.url
-        }
-    },
-    {
-        new: true
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "Avatar file is missing")
     }
-   ).select("-password")
 
-   return res
-         .status(200)
-         .json(new ApiResponse(
-             200,
-              user,
-             "Avatar Updated Successfully"))
+    const OldAvatar = req.user?.avatar
+    // console.log("User old avatar: ", OldAvatar);
+
+    let oldAvatarPublicID = null;
+    // Extract the public_id from the old avatar URL if it exists
+    if (OldAvatar) {
+        const match = OldAvatar.match(/\/v\d+\/([^\/]+)(?=\.[a-z]+$)/i);
+        // Explanation of the regex:
+        // Structure of cloudinary url: https://res.cloudinary.com/{cloud_name}/image/upload/v{version}/{public_id}.{file_extension}
+        // \/v\d+        - Matches "/v" followed by one or more digits (the version number)
+        // \/            - Matches a literal "/"
+        // ([^\/]+)      - Captures one or more characters that are not "/" (the public_id)
+        // (?=\.[a-z]+$)  - Positive lookahead: ensures the public_id is followed by a file extension (e.g., .png, .jpg)
+        // /i            - Case-insensitive flag to allow matching both uppercase and lowercase letters
+        oldAvatarPublicID = match ? match[1] : null;
+    }
+
+    // console.log(oldAvatarPublicID);
+
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath)
+    if (!avatar.url) {
+        throw new ApiError(400, "Erro while uploading Avatar file")
+    }
+
+    // Delete the old avatar from Cloudinary if a public_id was found
+    if (oldAvatarPublicID) {
+        const deleteOldAvatar = await deleteFromCloudinary(oldAvatarPublicID);
+        if (!deleteOldAvatar) {
+            throw new ApiError(500, "Failed to delete old avatar from Cloudinary");
+        }
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                avatar: avatar.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password")
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            user,
+            "Avatar Updated Successfully"))
 });
 
-//TODO: Delete old coverImage from cloudinary
-const updateUserCoverImage = asyncHandler(async (req,res) => {
-   const coverImageLocalPath = req.file?.path
+const updateUserCoverImage = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path
 
-   if (!coverImageLocalPath) {
-    throw new ApiError(400, "coverImage file is missing")
-   }
-
-   const coverImage = await uploadOnCloudinary(coverImageLocalPath)
-   if (!coverImage.url) {
-    throw new ApiError(400, "Erro while uploading coverImage file")
-   }
-    
-   const user = await User.findByIdAndUpdate(
-    req.user?._id,
-    {
-        $set: {
-            coverImage: coverImage.url
-        }
-    },
-    {
-        new: true
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "coverImage file is missing")
     }
-   ).select("-password")
 
-   return res
-         .status(200)
-         .json(new ApiResponse(
-             200,
-              user,
-             "coverImage Updated Successfully"))
+    const oldCoverImage = req.user?.coverImage
+    
+    let coverImageId = null
+
+    if (oldCoverImage) {
+        const match = oldCoverImage.match(/\/v\d+\/([^\/]+)(?=\.[a-z]+$)/i);
+        // Explanation of the regex:
+        // Structure of cloudinary url: https://res.cloudinary.com/{cloud_name}/image/upload/v{version}/{public_id}.{file_extension}
+        // \/v\d+        - Matches "/v" followed by one or more digits (the version number)
+        // \/            - Matches a literal "/"
+        // ([^\/]+)      - Captures one or more characters that are not "/" (the public_id)
+        // (?=\.[a-z]+$)  - Positive lookahead: ensures the public_id is followed by a file extension (e.g., .png, .jpg)
+        // /i            - Case-insensitive flag to allow matching both uppercase and lowercase letters
+        coverImageId = match ? match[1] : null
+    }
+    
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath)
+    if (!coverImage.url) {
+        throw new ApiError(400, "Erro while uploading coverImage file")
+    }
+
+    // Delete the old CoverImage from Cloudinary if a public_id was found
+    if (coverImageId) {
+        const deleteOldCoverImage = await deleteFromCloudinary(coverImageId);
+        if (!deleteOldCoverImage) {
+            throw new ApiError(500, "Failed to delete old coverImage from Cloudinary");
+        }
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                coverImage: coverImage.url
+            }
+        },
+        {
+            new: true
+        }
+    ).select("-password")
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            user,
+            "coverImage Updated Successfully"))
 });
 
-const getUserChannelProfile = asyncHandler(async (req,res) => {
-    const { username } = req.params 
+const getUserChannelProfile = asyncHandler(async (req, res) => {
+    const { username } = req.params
     if (!username?.trim()) {
         throw new ApiError(400, "username is missing")
     }
@@ -346,7 +397,7 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
                 localField: "_id",
                 foreignField: "subscriber",
                 as: "subscribedTo"
-            }   
+            }
         },
         {
             $addFields: {
@@ -358,7 +409,7 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
                 },
                 isSubscribed: {
                     $cond: {
-                        if: {$in: [req.user?._id, "$subscribers.subscriber"]},
+                        if: { $in: [req.user?._id, "$subscribers.subscriber"] },
                         then: true,
                         else: false
                     }
@@ -380,18 +431,18 @@ const getUserChannelProfile = asyncHandler(async (req,res) => {
     ]);
 
     // console.log(channel);
-    
+
     if (!channel?.length) {
         throw new ApiError(400, "Channel does not exists")
     }
 
 
-    return res 
+    return res
         .status(200)
         .json(new ApiResponse(200, channel[0], "User channel fetched successfully"))
 });
 
-const getWatchHistory = asyncHandler(async (req,res) => {
+const getWatchHistory = asyncHandler(async (req, res) => {
     const user = await User.aggregate([
         {
             $match: {
