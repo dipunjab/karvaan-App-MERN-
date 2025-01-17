@@ -1,4 +1,5 @@
 import { Video } from "../models/video.model.js"
+import {User} from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
@@ -9,8 +10,13 @@ import { createMatchFunction } from "../utils/matchCloudinaryRegex.js"
 const getAllVideos = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10, query, sortBy='createdAt', sortType="desc", userId } = req.query
 
+    const user = await User.findById(userId)
+    if(!user){
+        throw new ApiError(400, "User does not exist")
+    }
+    
     const skip = (page - 1) * limit;
-
+    
     let filter = {}
     if (query) {
         filter.title =  { $regex: query, $options: 'i' };
