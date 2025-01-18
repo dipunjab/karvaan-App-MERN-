@@ -30,6 +30,21 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     }
 });
 
+const getTotalVideoLikes = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+
+    if (!isValidObjectId(videoId)) {
+        throw new ApiError(400, "Invalid Video Object Id");
+    }
+
+    const totalLikes = await Like.countDocuments({ video: videoId });
+
+    return res.status(200).json(
+        new ApiResponse(200, { totalLikes }, "Successfully fetched total likes for videos.")
+    );
+});
+
+
 const toggleCommentLike = asyncHandler(async (req, res) => {
     const { commentId } = req.params
     if (!isValidObjectId(commentId)) {
@@ -54,6 +69,19 @@ const toggleCommentLike = asyncHandler(async (req, res) => {
             .status(200)
             .json(new ApiResponse(200, createLike, "Successfully liked the comment."));
     }
+});
+const getTotalCommentLikes = asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+
+    if (!isValidObjectId(commentId)) {
+        throw new ApiError(400, "Invalid Comment Object Id");
+    }
+
+    const totalLikes = await Like.countDocuments({ comment: commentId });
+
+    return res.status(200).json(
+        new ApiResponse(200, { totalLikes }, "Successfully fetched total likes for Comments.")
+    );
 });
 
 const toggleTweetLike = asyncHandler(async (req, res) => {
@@ -81,6 +109,19 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
             .json(new ApiResponse(200, createLike, "Successfully liked the tweet."));
     }}
 );
+const getTotalTweetLikes = asyncHandler(async (req, res) => {
+    const { tweetId } = req.params;
+
+    if (!isValidObjectId(tweetId)) {
+        throw new ApiError(400, "Invalid Video Object Id");
+    }
+
+    const totalLikes = await Like.countDocuments({ tweet: tweetId });
+
+    return res.status(200).json(
+        new ApiResponse(200, { totalLikes }, "Successfully fetched total likes for tweets.")
+    );
+});
 
 const getLikedVideos = asyncHandler(async (req, res) => {
 
@@ -126,5 +167,8 @@ export {
     toggleCommentLike,
     toggleTweetLike,
     toggleVideoLike,
+    getTotalVideoLikes,
+    getTotalCommentLikes,
+    getTotalTweetLikes,
     getLikedVideos
 }
