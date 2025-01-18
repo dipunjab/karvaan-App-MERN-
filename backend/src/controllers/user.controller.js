@@ -490,6 +490,22 @@ const getWatchHistory = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, user[0].watchHistory, "Watch History Fetched Successfully"))
 });
 
+const clearWatchHistory = asyncHandler(async (req,res) => {
+    const history = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $set: {
+                watchHistory: []
+            }
+        },
+        {
+            new: true
+        }
+    )
+
+    return res.status(200).json(new ApiResponse(200, history, "History Cleared"))
+});
+
 export {
     registerUser,
     loginUser,
@@ -501,5 +517,6 @@ export {
     updateUserAvatar,
     updateUserCoverImage,
     getUserChannelProfile,
-    getWatchHistory
+    getWatchHistory,
+    clearWatchHistory
 }

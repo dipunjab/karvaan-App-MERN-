@@ -1,5 +1,5 @@
 import { Video } from "../models/video.model.js"
-import {User} from "../models/user.model.js"
+import { User } from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { asyncHandler } from "../utils/asyncHandler.js"
@@ -8,22 +8,22 @@ import { createMatchFunction } from "../utils/matchCloudinaryRegex.js"
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
-    const { page = 1, limit = 10, query, sortBy='createdAt', sortType="desc", userId } = req.query
+    const { page = 1, limit = 10, query, sortBy = 'createdAt', sortType = "desc", userId } = req.query
 
     // const user = await User.findById(userId)
-    
+
     const skip = (page - 1) * limit;
-    
+
     let filter = {}
     if (query) {
-        filter.title =  { $regex: query, $options: 'i' };
+        filter.title = { $regex: query, $options: 'i' };
     }
     if (userId) {
         filter.owner = userId
     }
 
     let sort = {}
-    sort[sortBy] = sortType === 'asc'? 1:-1 
+    sort[sortBy] = sortType === 'asc' ? 1 : -1
 
     const aggregate = [
         { $match: filter },
@@ -40,15 +40,15 @@ const getAllVideos = asyncHandler(async (req, res) => {
     }
 
     return res
-            .status(200)
-            .json(new ApiResponse(
-                200,
-                {
-                    videos: videos.docs,
-                    CountVideos: videos.totalDocs,
-                    totalPages: videos.totalPages
-                },
-                "All videos fetched"))
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                videos: videos.docs,
+                CountVideos: videos.totalDocs,
+                totalPages: videos.totalPages
+            },
+            "All videos fetched"))
 });
 
 const publishAVideo = asyncHandler(async (req, res) => {
@@ -106,6 +106,15 @@ const getVideoById = asyncHandler(async (req, res) => {
     if (!video) {
         throw new ApiError(400, "Video not Found.")
     }
+
+    await User.findByIdAndUpdate(
+        req.user._id,
+        {
+            $addToSet: {
+                watchHistory: videoId
+            }
+        }
+    )
 
     return res
         .status(200)
@@ -232,11 +241,11 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
     if (!video) {
         throw new ApiError(404, "Video not found")
     }
-    
+
     const videoToggled = await Video.findByIdAndUpdate(
         videoId,
         {
-            $set:{
+            $set: {
                 isPublished: !video.isPublished
             }
         },
