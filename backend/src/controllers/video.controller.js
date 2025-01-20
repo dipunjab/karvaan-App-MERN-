@@ -12,8 +12,6 @@ const getAllVideos = asyncHandler(async (req, res) => {
 
     // const user = await User.findById(userId)
 
-    const skip = (page - 1) * limit;
-
     let filter = {}
     if (query) {
         filter.title = { $regex: query, $options: 'i' };
