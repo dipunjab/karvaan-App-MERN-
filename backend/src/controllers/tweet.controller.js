@@ -97,9 +97,51 @@ const deleteTweet = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, tweet, "Tweet deleted successfully"))
 });
 
+const getAllTweets = asyncHandler(async (req,res) => {
+    const { page = 1, limit = 10, query, sortBy = 'createdAt', sortType = "desc", userId } = req.query
+
+    let filter = {}
+    if (query) {
+        filter.content = { $regex: query, $options: 'i' };
+    }
+    if (userId) {
+        filter.owner = userId
+    }
+
+    let sort = {}
+    sort[sortBy] = sortType === 'asc' ? 1 : -1
+
+    const aggregate = [
+        { $match: filter },
+        { $sort: sort },
+    ]
+    const options = {
+        page: Number(page),
+        limit: Number(limit),
+    };
+
+    const tweets = await Tweet.aggregatePaginate(aggregate, options);
+    if (!tweets) {
+        throw new ApiError(404, "Tweets not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {
+                tweets: tweets.docs,
+                CountTweets: tweets.totalDocs,
+                totalPages: tweets.totalPages
+            },
+            "All tweets fetched"))
+
+});
+
 export {
     createTweet,
     getUserTweets,
     updateTweet,
-    deleteTweet
+    deleteTweet,
+    getAllTweets
 }
