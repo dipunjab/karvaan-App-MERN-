@@ -42,7 +42,7 @@ app.use("/api/v1/dashboard", dashboardRouter)
 
 //for checking deployment 
 app.get("/",(req,res)=>{
-    res.send("hello")
+    res.send("Welcome To karvaan Backend")
 })
 
 
