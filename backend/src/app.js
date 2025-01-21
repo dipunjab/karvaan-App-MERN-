@@ -40,4 +40,10 @@ app.use("/api/v1/playlist", playlistRouter)
 app.use("/api/v1/dashboard", dashboardRouter)
 
 
+//for checking deployment 
+app.get("/",(req,res)=>{
+    res.send("hello")
+})
+
+
 export { app }
