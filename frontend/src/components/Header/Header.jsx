@@ -6,7 +6,7 @@ import ProfileButton from './ProfileButton'
 
 const Header = () => {
 
-  const [countryCode, setCountryCode] = useState(() => localStorage.getItem("countryCode") || null);
+  const [countryCode, setCountryCode] = useState(localStorage.getItem("countryCode") || null);
 
   useEffect(() => {
     const fetchLocation = async () => {

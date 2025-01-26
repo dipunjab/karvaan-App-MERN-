@@ -10,7 +10,7 @@ function App() {
       </div>
 
       <div className="flex pt-16">
-        <aside className="fixed top-22 left-0 h-[calc(100vh-4rem)] md:w-56 w-24 shadow shadow-gray-100 z-10 md:p-7 p-4">
+        <aside className="fixed top-22 left-0 h-[calc(100vh-4rem)] sm:w-50 w-20 shadow shadow-gray-100 z-10 md:p-6 p-4">
           <SideBar />
         </aside>
 
