@@ -5,7 +5,7 @@ import App from './App.jsx'
 import store from "./store/store.js"
 import { Provider } from 'react-redux'
 
-import { Home } from "./pages/index.js"
+import { Home, Tweets } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -16,6 +16,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home/>
+      },
+      {
+        path: "/tweets",
+        element: <Tweets/>
       }
     ]
   }
