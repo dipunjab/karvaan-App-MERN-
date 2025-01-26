@@ -1,1 +1,6 @@
 @import "tailwindcss";
+
+@theme {
+    --font-palanquin: Palanquin, sans-serif;
+    --font-montserrat: Montserrat,sans-serif
+}
