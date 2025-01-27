@@ -9,7 +9,8 @@ import { Home,
          Tweets,
          Playlists,
          LikedVideos,
-         Subscriptions
+         Subscriptions,
+         YourVideos
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/subscriptions",
         element: <Subscriptions/>
+      },
+      {
+        path: "/uservideos",
+        element: <YourVideos/>
       }
     ]
   }

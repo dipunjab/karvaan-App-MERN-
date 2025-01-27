@@ -3,11 +3,13 @@ import Tweets from "./Tweets";
 import Playlists from "./Playlists";
 import LikedVideos from "./LikedVideos"
 import Subscriptions from "./Subscriptions"
+import YourVideos from "./YourVideos";
 
 export {
     Home,
     Tweets,
     Playlists,
     LikedVideos,
-    Subscriptions
+    Subscriptions,
+    YourVideos
 }

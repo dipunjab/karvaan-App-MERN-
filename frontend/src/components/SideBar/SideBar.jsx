@@ -24,7 +24,7 @@ function SideBar() {
           </Link>
         </li>
 
-        {isAuthenticated ? (
+        {!isAuthenticated ? (
           <p className="mt-6 sm:ml-6 font-extralight text-[12px]  sm:text-base">
             Join us on the Karvan app! Create your own channel to explore, discover, learn, and grow. It's your space to connect, share ideas, and make the journey meaningful. Start your adventure with Karvan today!
           </p>
