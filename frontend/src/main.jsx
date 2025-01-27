@@ -5,7 +5,10 @@ import App from './App.jsx'
 import store from "./store/store.js"
 import { Provider } from 'react-redux'
 
-import { Home, Tweets } from "./pages/index.js"
+import { Home,
+         Tweets,
+         Playlists
+         } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -20,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/tweets",
         element: <Tweets/>
+      },
+      {
+        path: "/playlists",
+        element: <Playlists/>
       }
     ]
   }
