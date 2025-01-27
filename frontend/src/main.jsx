@@ -7,7 +7,9 @@ import { Provider } from 'react-redux'
 
 import { Home,
          Tweets,
-         Playlists
+         Playlists,
+         LikedVideos,
+         Subscriptions
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
       {
         path: "/playlists",
         element: <Playlists/>
+      },
+      {
+        path: "/liked-videos",
+        element: <LikedVideos/>
+      },
+      {
+        path: "/subscriptions",
+        element: <Subscriptions/>
       }
     ]
   }
