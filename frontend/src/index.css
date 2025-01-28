@@ -1,6 +1,42 @@
 @import "tailwindcss";
 
-@theme {
-    --font-palanquin: Palanquin, sans-serif;
-    --font-montserrat: Montserrat,sans-serif
+.range-input{
+    height: 4px;
+    appearance: none;
+    background: #edf1f4;
+    outline: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
 }
+
+.range-input::-webkit-slider-thumb{
+    appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: green;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+
+.range-volume{
+    height: 2px;
+    appearance: none;
+    background: #edf1f4;
+    outline: none;
+    border-radius: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.range-volume::-webkit-slider-thumb{
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: green;
+    border: 2px solid white;
+    cursor: pointer;
+}
+
+

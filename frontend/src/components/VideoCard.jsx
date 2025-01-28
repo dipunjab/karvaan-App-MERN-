@@ -1,8 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const VideoCard = ({title, thumbnail, username, userpfp, createdAt, views}) => {
+const VideoCard = ({id,title, thumbnail, username, userpfp, createdAt, views}) => {
+    const navigate = useNavigate()
+
+    const openVideo = ()=>{
+        navigate(`/watchvideo/${id}?username=${username}`)
+    }
+
     return (
-        <div className="flex flex-col mt-4 rounded-2xl w-full hover:shadow hover:shadow-gray-300 cursor-pointer">
+        <div onClick={openVideo}
+            className="flex flex-col mt-4 rounded-2xl w-full hover:shadow hover:shadow-gray-300 cursor-pointer">
             <div className='w-full'>
                 <img src={thumbnail} alt="" className='h-48 w-full rounded-2xl' />
             </div>
