@@ -3,7 +3,7 @@ import robot from "../assets/robot.jfif"
 import profileIcon from "../assets/profileIcon.jfif"
 import { IoIosRemoveCircle } from "react-icons/io";
 
-const LikedVideoCard = () => {
+const ButtonVideoCard = () => {
     return (
         <div className='relative mr-4'>
             <div className="flex flex-col mt-4 rounded-2xl w-full hover:shadow hover:shadow-gray-300 cursor-pointer">
@@ -29,4 +29,4 @@ const LikedVideoCard = () => {
     )
 }
 
-export default LikedVideoCard
+export default ButtonVideoCard

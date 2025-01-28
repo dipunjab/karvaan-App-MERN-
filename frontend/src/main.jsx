@@ -10,7 +10,8 @@ import { Home,
          Playlists,
          LikedVideos,
          Subscriptions,
-         YourVideos
+         YourVideos,
+         History
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/uservideos",
         element: <YourVideos/>
+      },
+      {
+        path: "/watch-history",
+        element: <History/>
       }
     ]
   }

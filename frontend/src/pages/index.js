@@ -4,6 +4,8 @@ import Playlists from "./Playlists";
 import LikedVideos from "./LikedVideos"
 import Subscriptions from "./Subscriptions"
 import YourVideos from "./YourVideos";
+import History from "./History";
+
 
 export {
     Home,
@@ -11,5 +13,6 @@ export {
     Playlists,
     LikedVideos,
     Subscriptions,
-    YourVideos
+    YourVideos,
+    History
 }

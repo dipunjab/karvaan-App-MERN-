@@ -18,7 +18,7 @@ const YourVideosCard = () => {
                 </div>
             </div>
             <div className='border-l-2 border-l-gray-50 ml-1'>
-                <div className='ml-3'>
+                <div className='flex flex-col ml-3 gap-7'>
                 <MdAutoDelete size={30} color='green'/>
                 <FaEdit size={30} color='green'/>
                 </div>

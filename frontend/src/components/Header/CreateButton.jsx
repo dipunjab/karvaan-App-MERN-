@@ -11,7 +11,7 @@ const CreateButton = () => {
             {
                 isAuthenticated ?
                     (
-                        <div className='cursor-pointer'>
+                        <div className='cursor-pointer flex gap-2'>
                             <h2 className='text-gray-400 font-palanquin sm:block hidden'>Create</h2>
                             <FiUpload size={20} color='gray' />
                         </div>
