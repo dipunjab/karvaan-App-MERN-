@@ -114,9 +114,15 @@ const videoSlice = createSlice({
     watchedVideo: (state) => {
       state.watchedVideos = state.videos.filter((video) => video.watched === true);
     },
+    toggleLike: (state, action) => {
+      const video = state.videos.find((video) => video.id === action.payload);
+      if (video) {
+        video.likedBy = !video.likedBy;
+      }
+    },
   },
 });
 
-export const { likedVideo, watchedVideo } = videoSlice.actions;
+export const { likedVideo, watchedVideo, toggleLike } = videoSlice.actions;
 
 export default videoSlice.reducer;
