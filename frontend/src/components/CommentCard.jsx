@@ -17,18 +17,18 @@ const CommentCard = ({username, userpfp, content, createdAt, likedBy, totalLikes
                 <h2 className='font-light text-[15px]'>{createdAt || "loading..."}</h2>
             </div>
             <hr className='mt-2 mb-2 text-gray-300' />
-            <div className='bg-gray-200 p-2 rounded-3xl'>
+            <div className='p-2 rounded-3xl'>
                 <p className='font-light text-[15px]'>{content || "loading..."}</p>
             </div>
             <div className='flex justify-end mt-2 gap-2 mr-3'>
 
                 {
                     isLiked ?
-                        <AiFillLike color='green' size={15} className='cursor-pointer' />
+                        <AiFillLike color='green' size={25} className='cursor-pointer' />
                         :
-                        <SlLike color='green' className='cursor-pointer' size={15} />
+                        <SlLike color='green' className='cursor-pointer' size={25} />
                 }
-                <h2 className='text-[8px] text-green-700 font-semibold'>{totalLikes}</h2>
+                <h2 className='text-[18px] text-green-700 font-semibold'>{totalLikes}</h2>
             </div>
         </div>
     )

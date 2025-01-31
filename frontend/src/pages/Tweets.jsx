@@ -11,7 +11,7 @@ const Tweets = () => {
       <div className='grid grid-rows-1'>
         {
           tweets.map((tweet) => (
-            <div key={tweet.id}>
+            <div key={tweet.id} >
               <TweetsCard tweet={tweet}/>
             </div>
           ))

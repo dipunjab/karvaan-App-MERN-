@@ -13,7 +13,8 @@ import { Home,
          YourVideos,
          History,
          WatchVideo,
-         Profile
+         Profile,
+         FullTweet
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "/watchvideo/:videoId",
         element: <WatchVideo/>
+      },
+      {
+        path: "/fulltweet/:tweetId",
+        element: <FullTweet/>
       },
       {
         path: "/profile",
