@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import profileIcon from "../../assets/profileIcon.jfif"
 import ProfileModal from './ProfileModal';
+import { CgProfile } from "react-icons/cg";
 
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal, openModal } from '../../store/modalSlice';
@@ -9,6 +10,7 @@ const ProfileButton = () => {
     const modalRef = useRef(null);
     const dispatch = useDispatch();
     const modal = useSelector((state) => state.modal.show);
+    const isAuthenticated = useSelector((state) => state.auth.status)
 
     const toggleModal = () => {
         if (modal) {
@@ -35,8 +37,8 @@ const ProfileButton = () => {
 
 
 
-    return (
-        <div onClick={toggleModal} className='w-14 h-14 shadow cursor-pointer shadow-green-500 p-2 rounded-[50px]'>
+   return isAuthenticated ?  (
+        <div onClick={toggleModal} className='w-14 h-14 shadow cursor-pointer shadow-gray-300 p-2 rounded-[50px]'>
             <img src={profileIcon} alt="profileIcon" />
             {modal ?
                 (
@@ -44,6 +46,11 @@ const ProfileButton = () => {
                         <ProfileModal />
                     </div>
                 ) : null}
+        </div>
+    ): 
+    (
+        <div className='w-14 h-14 shadow cursor-pointer shadow-gray-300 p-2 rounded-[50px]'>
+            <CgProfile size={40}/>
         </div>
     )
 }

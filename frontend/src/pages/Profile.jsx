@@ -39,9 +39,9 @@ const Profile = () => {
           <div>
             <h1 className='font-bold text-2xl '>Monkieee</h1>
             <div className='flex flex-col sm:flex-row items-center justify-center sm:gap-5'>
-              <h2 className='font-medium text-gray-400 text-[15px]'>@Monkieee</h2>
+              <h2 className='font-medium text-gray-400 md:text-[15px]'>@Monkieee</h2>
               <hr className='text-green-800 w-2'/>
-              <h3 className='text-green-900 font-medium text-[10px]'>Subscribers: 300</h3>
+              <h3 className='text-green-900 font-medium text-[15px]'>Subscribers: 300</h3>
             </div>
           </div>
         </div>

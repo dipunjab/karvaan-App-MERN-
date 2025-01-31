@@ -41,7 +41,7 @@ const CreateButton = () => {
                     ) :
                     <p className='text-wrap text-[6px] sm:text-[14px] font-light'>Join Us To Create</p>
             }
-            {modal ?
+            {modal && isAuthenticated?
                 (
                         <div ref={modalRef} className='absolute top-12 right-0 md:left-0'>
                             <CreateModal />
