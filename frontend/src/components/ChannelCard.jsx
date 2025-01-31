@@ -8,7 +8,7 @@ const ChannelCard = () => {
     return (
         <div className='mt-4 p-2 bg-white shadow drop-shadow-sm shadow-green-100 rounded-full flex justify-between items-center'>
             <div className='flex justify-start items-center'>
-                <div className='sm:w-20 sm:h-20 md:w-30 md:h-30 rounded-full'>
+                <div className='w-20 h-20 md:w-30 md:h-30 rounded-full'>
                     <img src={robot} alt="" className='rounded-full' />
                 </div>
                 <div className='ml-2 text-start'>

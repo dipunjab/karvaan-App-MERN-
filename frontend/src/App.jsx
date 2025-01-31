@@ -14,7 +14,7 @@ function App() {
           <SideBar />
         </aside>
 
-        <main className="ml-6 sm:ml-52 w-full h-[calc(100vh-4rem)] overflow-y-auto p-6">
+        <main className="ml-6 sm:ml-52 w-full h-[calc(100vh-4rem)] overflow-y-auto p-6 sm:p-1">
           <Outlet />
         </main>
       </div>

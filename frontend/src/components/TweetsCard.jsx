@@ -9,7 +9,7 @@ import CommentCard from './CommentCard';
 
 
 const TweetsCard = ({tweet}) => {
-    const [isLiked, setLiked] = useState(tweet.likedBy)
+    const [isLiked, setLiked] = useState(tweet.likedBy || true)
     const [comments, setComments] = useState(false)
 
     const showComments = () => {
@@ -22,23 +22,23 @@ const TweetsCard = ({tweet}) => {
             <div className='flex justify-between items-center'>
                 <div className='flex items-center'>
                     <div className='w-8 h-8 shadow shadow-gray-500 rounded-full overflow-hidden'>
-                        <img src={tweet.userpfp} alt="profileIcon" className='w-full h-full' />
+                        <img src={tweet.userpfp|| ""} alt="profileIcon" className='w-full h-full' />
                     </div>
                     <div className='flex'>
                         <div className='ml-3'>
-                            <h2 className='text-gray-600 text-sm font-medium'>{tweet.username}</h2>
-                            <p className='text-gray-500 text-xs'>Subscribers: {tweet.totalSubscribers}</p>
+                            <h2 className='text-gray-600 text-sm font-medium'>{tweet.username || "monkiee"}</h2>
+                            <p className='text-gray-500 text-xs'>Subscribers: {tweet.totalSubscribers|| "21"}</p>
                         </div>
-                        <h1 className='ml-5 text-sm font-extrabold text-green-700'>{ tweet.totalSubscribed ? ".Be Hamrah": "✅ Hamrah"}</h1>
+                        <h1 className='ml-5 text-sm font-extrabold text-green-700'>{ tweet.totalSubscribed ? ".Be Hamrah": "✅ Hamrah" || ""}</h1>
                     </div>
                 </div>
                 <div>
-                    <h2 className='text-gray-400 text-xs'>{tweet.createdAt}</h2>
+                    <h2 className='text-gray-400 text-xs'>{tweet.createdAt|""}</h2>
                 </div>
             </div>
             {/* Tweet Content */}
             <div className='text-[13px] mt-2 p-2 font-medium'>
-                <p>{tweet.content}</p>
+                <p>{tweet.content || "lorem"}</p>
             </div>
             {/* icons and input for remarks */}
             <div className='flex justify-between items-center'>
@@ -52,7 +52,7 @@ const TweetsCard = ({tweet}) => {
                     <h2 className='text-[12px] text-green-700 font-semibold'>{tweet.totalLikes}</h2>
                     <div className='flex ml-5 md:ml-10 gap-1 justify-center items-center cursor-pointer' onClick={showComments}>
                         <AiOutlineComment size={20} color='green' />
-                        <h2 className='text-[12px] text-green-700 font-semibold'>{tweet.comments.length}</h2>
+                        <h2 className='text-[12px] text-green-700 font-semibold'>{tweet.comments.length || "0"}</h2>
                     </div>
                 </div>
                 <div className='flex justify-between items-center shadow rounded-3xl p-1 lg:p-2 bg-white'>
