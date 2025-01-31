@@ -21,7 +21,7 @@ const ButtonVideoCard = ({title, thumbnail, username, userpfp, createdAt, views}
                         <p>{createdAt}</p>
                     </div>
                 </div>
-            <button className='absolute z-10 top-0 left-[90%] cursor-pointer'><IoIosRemoveCircle size={40} color='#4CBB17'/></button>
+            <button className='absolute z-1 top-0 left-[90%] cursor-pointer'><IoIosRemoveCircle size={40} color='#4CBB17'/></button>
             </div>
         </div>
     )

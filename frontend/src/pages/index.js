@@ -6,6 +6,7 @@ import Subscriptions from "./Subscriptions"
 import YourVideos from "./YourVideos";
 import History from "./History";
 import WatchVideo from "./watchVideo";
+import Profile from "./Profile";
 
 export {
     Home,
@@ -15,5 +16,6 @@ export {
     Subscriptions,
     YourVideos,
     History,
-    WatchVideo
+    WatchVideo,
+    Profile
 }

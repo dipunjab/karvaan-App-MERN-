@@ -12,7 +12,8 @@ import { Home,
          Subscriptions,
          YourVideos,
          History,
-         WatchVideo
+         WatchVideo,
+         Profile
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "/watchvideo/:videoId",
         element: <WatchVideo/>
+      },
+      {
+        path: "/profile",
+        element: <Profile/>
       }
     ]
   }
