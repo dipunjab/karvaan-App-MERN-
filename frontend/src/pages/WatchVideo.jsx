@@ -16,13 +16,20 @@ const WatchVideo = () => {
     const dispatch = useDispatch()
 
     const video = useSelector((state) =>
-        state.video.videos.find((video) => video.id === videoId)
+        state.video.videos.find((vid) => vid._id === videoId)
     );
+    console.log(video);
+    
+    if (!video) {
+        return <h1 className="text-center mt-10 text-red-500">Video not found</h1>;
+    }
 
-    const [isLiked, setLiked] = useState(video.likedBy)
+    const { title, description, videoFile,username, userpfp, createdAt, views } = video;
+
+
+    const [isLiked, setLiked] = useState(false)
 
     const toggleLikeVideo = () => {
-        dispatch(toggleLike(video.id));
         setLiked(!isLiked);
     };
 
@@ -30,11 +37,13 @@ const WatchVideo = () => {
     return (
         <div className='ml-8 flex lg:flex-row flex-col gap-10'>
             <div className='flex flex-col'>
-                <VideoPlayer videoSrc={video.videoFile} />
-                <h1 className='mt-4 text-3xl font-medium'>{video.title}</h1>
-                <p className='mt-2 text-[12px] md:text-[15px] lg:w-[720px]'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum nisi, voluptatibus quisquam labore non earum excepturi tenetur, quae asperiores ad, accusantium rem! Enim perferendis aut sunt quibusdam, et earum unde.</p>
+                <VideoPlayer videoSrc={videoFile} />
+                <h1 className='mt-4 text-3xl font-medium'>{title}</h1>
+                <p className='mt-2 text-[12px] md:text-[15px] lg:w-[720px]'>{description}</p>
                 <div className='flex justify-start items-center gap-20'>
-                    <h1 className='mt-2 font-medium text-gray-500'>Views: {video.views}</h1>
+                    <h1 className='mt-2 font-medium text-gray-500'>Views: {views}</h1>
+                    <p>{new Date(createdAt).toDateString()}</p>
+
                     <div className='flex justify-center items-center mt-2 gap-4' onClick={toggleLikeVideo}>
 
                         {
@@ -49,8 +58,8 @@ const WatchVideo = () => {
 
                 <div className='flex mt-4 justify-between items-center p-1'>
                     <div className='flex w-10 h-10 mb-2 shadow shadow-gray-500 rounded-[50px]'>
-                        <img src={video.userpfp} alt="profileIcon" className='rounded-[50px]' />
-                        <h2 className='ml-2 mt-2 font-extralight text-[14px] text-gray-600'>{video.username}</h2>
+                        <img src={userpfp} alt="profileIcon" className='rounded-[50px]' />
+                        <h2 className='ml-2 mt-2 font-extralight text-[14px] text-gray-600'>{username}</h2>
                     </div>
                     <div className='mb-2'>
                         <SubscribedButton iSubscribed={true} />

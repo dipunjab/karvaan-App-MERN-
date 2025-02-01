@@ -1,18 +1,26 @@
-import React from 'react';
-import VideoCard from '../components/videoCard';
-import { useSelector } from 'react-redux';
-//title, thumbnail, username, userpfp, createdAt, views
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import VideoCard from "../components/videoCard";
+import { fetchVideos } from "../store/videosSlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { videos, status, error } = useSelector((state) => state.video);
 
-   const getAllVideos = useSelector((state) => state.video.videos);
+  useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchVideos()); 
+    }
+  }, [dispatch, status]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4">
-      {getAllVideos.length > 0 ?  getAllVideos.map((video)=> (
-        <div key={video.title}>
-          <VideoCard {...video}/>
-        </div>
-      )) : <>No Videos</>}
+      {status === "loading" && <p>Loading videos...</p>}
+      {status === "failed" && <p>Error loading videos: {error}</p>}
+      {videos.length > 0 &&
+        videos.map((video) => (
+          <VideoCard key={video._id} {...video} />
+        ))}
     </div>
   );
 };

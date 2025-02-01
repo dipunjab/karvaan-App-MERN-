@@ -1,17 +1,13 @@
 import React, { useEffect } from 'react'
 import ButtonVideoCard from '../components/ButtonVideoCard'
 import { useDispatch, useSelector } from 'react-redux'
-import { watchedVideo } from "../store/videosSlice";
 
 const History = () => {
 
     const dispatch = useDispatch();
 
-    const getHistory = useSelector((state) => state.video.watchedVideos);
-  
-    useEffect(() => {
-      dispatch(watchedVideo());
-    }, [dispatch]);
+    const getHistory = [];
+
     return (
         <div>
             <div>

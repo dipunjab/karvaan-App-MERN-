@@ -1,17 +1,9 @@
 import React, { useEffect } from "react";
 import ButtonVideoCard from "../components/ButtonVideoCard";
 import { useDispatch, useSelector } from "react-redux";
-import { likedVideo } from "../store/videosSlice";
 
 const LikedVideos = () => {
-  const dispatch = useDispatch();
-
-  const likedVideos = useSelector((state) => state.video.likedVideos);
-
-  useEffect(() => {
-    dispatch(likedVideo());
-  }, [dispatch]);
-
+  const dispatch = useDispatch()
   return (
     <div>
       <h1 className="ml-8 sm:ml-2 text-4xl text-gray-900 font-bold">

@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { uploadVideo } from '../store/videosSlice'
 import { useDispatch } from 'react-redux'
 
 const VideoForm = ({ closeForm }) => {
@@ -18,34 +17,6 @@ const VideoForm = ({ closeForm }) => {
   }
 
   const handleFiles = (e) => {
-    const { name, files } = e.target
-    setData((prev) => ({ ...prev, [name]: files[0] }))
-  }
-
-  const handleUpload = () => {
-    setData({
-      title: "",
-      description: "",
-      videoFile: "",
-      thumbnail: ""
-    })
-
-    const newVideo = {
-      id: (Math.random() * 8).toString(), 
-      title: data.title,
-      thumbnail: data.thumbnail ? URL.createObjectURL(data.thumbnail) : "", 
-      videoFile: data.videoFile ? URL.createObjectURL(data.videoFile): "",
-      username: "User123", 
-      userpfp: data.thumbnail ? URL.createObjectURL(data.thumbnail): "", // Replace with user profile pic
-      views: 0,
-      createdAt: new Date().toISOString(),
-      likedBy: false,
-      watched: false,
-    };
-
-    dispatch(uploadVideo(newVideo));
-    console.log("Data: ", data);
-    closeForm()
   }
 
   return (
