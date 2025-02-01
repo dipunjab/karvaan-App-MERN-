@@ -217,6 +217,18 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "Password Changed Successfully"))
 });
 
+const getUserByID = asyncHandler(async (req, res) => {
+    const {userId} = req.params
+
+    const users = await User.findById(userId)
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            users,
+            "Current user fetched Successfully"))
+});
 const getCurrentUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
@@ -518,5 +530,6 @@ export {
     updateUserCoverImage,
     getUserChannelProfile,
     getWatchHistory,
-    clearWatchHistory
+    clearWatchHistory,
+    getUserByID
 }
