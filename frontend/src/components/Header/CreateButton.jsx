@@ -39,7 +39,7 @@ const CreateButton = () => {
                             <FiUpload size={20} color={`${modal ? "green" : "gray"}`} />
                         </div>
                     ) :
-                    <p className='text-wrap text-[6px] sm:text-[14px] font-light'>Join Us To Create</p>
+                    <p className='text-[12px] sm:text-[14px] font-light'>Join To Create</p>
             }
             {modal && isAuthenticated?
                 (

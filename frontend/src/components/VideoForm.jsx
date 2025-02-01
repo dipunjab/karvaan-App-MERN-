@@ -1,6 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { uploadVideo } from '../store/videosSlice'
+import { useDispatch } from 'react-redux'
 
-const VideoForm = ({closeForm}) => {
+const VideoForm = ({ closeForm }) => {
+  const dispatch = useDispatch()
+  const [data, setData] = useState({
+    title: "",
+    description: "",
+    videoFile: "",
+    thumbnail: ""
+  })
+
+
+  const handleInput = (e) => {
+    const { name, value } = e.target
+    setData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleFiles = (e) => {
+    const { name, files } = e.target
+    setData((prev) => ({ ...prev, [name]: files[0] }))
+  }
+
+  const handleUpload = () => {
+    setData({
+      title: "",
+      description: "",
+      videoFile: "",
+      thumbnail: ""
+    })
+
+    const newVideo = {
+      id: (Math.random() * 8).toString(), 
+      title: data.title,
+      thumbnail: data.thumbnail ? URL.createObjectURL(data.thumbnail) : "", 
+      videoFile: data.videoFile ? URL.createObjectURL(data.videoFile): "",
+      username: "User123", 
+      userpfp: data.thumbnail ? URL.createObjectURL(data.thumbnail): "", // Replace with user profile pic
+      views: 0,
+      createdAt: new Date().toISOString(),
+      likedBy: false,
+      watched: false,
+    };
+
+    dispatch(uploadVideo(newVideo));
+    console.log("Data: ", data);
+    closeForm()
+  }
+
   return (
     <div className='bg-gray-100 p-2 rounded-2xl w-[300px] md:w-[500px] lg:w-[800px]'>
       <h1 className='text-center font-semibold text-2xl text-green-900'>Upload Video</h1>
@@ -11,30 +58,30 @@ const VideoForm = ({closeForm}) => {
         <div>
           <div className='flex md:flex-row flex-col'>
             <label htmlFor="title" className='text-[20px] font-semibold mr-20 text-green-950'>Title:</label>
-            <input type="text" placeholder='Title' className='bg-white p-1 rounded-xs '/>
+            <input type="text" placeholder='Title' className='bg-white p-1 rounded-xs ' name='title' onChange={handleInput} />
           </div>
           <div className='mt-2 flex md:flex-row flex-col'>
             <label htmlFor="description" className='text-[20px] font-semibold mr-3 text-green-950'>Description:</label>
-            <textarea name="description" rows={5} className='bg-white p-1 rounded-xs w-[220px]'></textarea>
+            <textarea name="description" rows={5} className='bg-white p-1 rounded-xs w-[220px]' onChange={handleInput}></textarea>
           </div>
         </div>
 
         <div className='mt-5 '>
-        <div className='md:flex-row flex-col'>
-          <label htmlFor="videoFile" className='text-[20px] font-semibold mr-10 text-green-950'>Video File</label>
-          <input type="file"  accept="video/*" className='bg-white p-2 w-[250px] md:w-[300px]'/>
+          <div className='md:flex-row flex-col'>
+            <label htmlFor="videoFile" className='text-[20px] font-semibold mr-10 text-green-950'>Video File</label>
+            <input type="file" accept="video/*" className='bg-white p-2 w-[250px] md:w-[300px]' name='videoFile' onChange={handleFiles} />
+          </div>
+          <div className='mt-3 md:flex-row flex-col'>
+            <label htmlFor="thumbnail" className='text-[20px] font-semibold mr-8 text-green-950'>Thumbnail</label>
+            <input type="file" accept="image/*" className='bg-white p-2 w-[250px] md:w-[300px]' name='thumbnail' onChange={handleFiles} />
+          </div>
         </div>
-        <div className='mt-3 md:flex-row flex-col'>
-          <label htmlFor="thumbnail" className='text-[20px] font-semibold mr-8 text-green-950'>Thumbnail</label>
-          <input type="file" accept="image/*" className='bg-white p-2 w-[250px] md:w-[300px]' />
-        </div>
-      </div>
       </div>
 
-    <div className='flex justify-center items-center gap-20'>
-      <button className='bg-green-600 hover:bg-green-400 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-800'>Upload</button>
-      <button className='bg-green-300 hover:bg-green-200 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-500' onClick={closeForm}>Cancel</button>
-    </div>
+      <div className='flex justify-center items-center gap-20'>
+        <button className='bg-green-600 hover:bg-green-400 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-800' onClick={handleUpload}>Upload</button>
+        <button className='bg-green-300 hover:bg-green-200 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-500' onClick={closeForm}>Cancel</button>
+      </div>
 
     </div>
 

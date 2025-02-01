@@ -61,7 +61,7 @@ const Profile = () => {
         ))}
       </div>
 
-      <div className='absolute mt-6 p-4 h-[600px] sm:h-[500px] grid grid-cols-2 lg:grid-cols-4 gap-3 overflow-y-scroll'>
+      <div className='absolute mt-6 p-4 h-[600px] sm:h-[500px] grid grid-cols-1 lg:grid-cols-4 gap-3 overflow-y-scroll'>
         {activeTab === "Videos" && <UserVideos />}
         {activeTab === "Playlists" && <UserPlaylist />}
         {activeTab === "Tweets" && <UserTweets />}

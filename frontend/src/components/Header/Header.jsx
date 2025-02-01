@@ -53,12 +53,12 @@ const Header = () => {
       </div>
 
       {/* upload button */}
-      <div className='mt-3'>
+      <div className='mt-4'>
         <CreateButton/>
       </div>
 
       {/* profile button */}
-      <div>
+      <div className='mt-2 sm:mt-0'>
           <ProfileButton/>
       </div>
     </header>
