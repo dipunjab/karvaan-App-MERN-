@@ -107,7 +107,8 @@ const toggleTweetLike = asyncHandler(async (req, res) => {
         return res
             .status(200)
             .json(new ApiResponse(200, createLike, "Successfully liked the tweet."));
-    }}
+    }
+}
 );
 const getTotalTweetLikes = asyncHandler(async (req, res) => {
     const { tweetId } = req.params;
@@ -140,7 +141,7 @@ const getLikedVideos = asyncHandler(async (req, res) => {
             }
         },
         {
-            $unwind: "$likedVideoDetail" 
+            $unwind: "$likedVideoDetail"
         },
         {
             $project: {
@@ -148,20 +149,104 @@ const getLikedVideos = asyncHandler(async (req, res) => {
                 likedVideoDetail: 1
             }
         }
-    ]) 
+    ])
 
 
-   return res
-    .status(200)
-    .json(
-        new ApiResponse(
-            200,
-            likedVideos,
-            "Liked videos fetched successully"
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                likedVideos,
+                "Liked videos fetched successully"
+            )
         )
-    )
 
 });
+
+const statusOfVideoLikeByUser = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
+    const like = await Like.findOne({video: videoId,
+        likedBy: req.user._id});
+
+    if (like) {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isLiked: true },
+                    "User Like for videos fetched successully"
+                )
+            )
+    } else {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isLiked: false },
+                    "User Like for videos fetched successully"
+                )
+            )
+    }
+});
+const statusOfCommentLikeByUser = asyncHandler(async (req, res) => {
+    const { commentId } = req.params;
+    const like = await Like.findOne({comment: commentId,
+        likedBy: req.user._id});
+
+    if (like) {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isLiked: true },
+                    "User Like for comment fetched successully"
+                )
+            )
+    } else {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isLiked: false },
+                    "User Like for comment fetched successully"
+                )
+            )
+    }
+});
+const statusOfTweetLikeByUser = asyncHandler(async (req, res) => {
+    const { tweetId } = req.params;
+    const like = await Like.findOne({tweet: tweetId,
+        likedBy: req.user._id});
+
+    if (like) {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isLiked: true },
+                    "User Like for comment fetched successully"
+                )
+            )
+    } else {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isLiked: false },
+                    "User Like for comment fetched successully"
+                )
+            )
+    }
+});
+
+
 
 export {
     toggleCommentLike,
@@ -170,5 +255,8 @@ export {
     getTotalVideoLikes,
     getTotalCommentLikes,
     getTotalTweetLikes,
-    getLikedVideos
+    getLikedVideos,
+    statusOfVideoLikeByUser,
+    statusOfCommentLikeByUser,
+    statusOfTweetLikeByUser
 }
