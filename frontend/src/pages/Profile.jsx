@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { closeModal } from "../store/modalSlice"
 import { RiImageEditLine } from "react-icons/ri";
 
@@ -9,9 +9,18 @@ import {
   UserVideos,
   ChannelStats
 } from "../components/ProfilePageComponents/index"
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("Videos");
+  const authentication = useSelector((state) => state.auth.status);
+  const navigate = useNavigate()
+
+  useEffect(()=>{
+    if(!authentication){
+      return navigate("/")
+    }
+  },[])
 
   const dispatch = useDispatch()
   dispatch(closeModal())

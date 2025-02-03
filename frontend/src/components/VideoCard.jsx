@@ -15,8 +15,10 @@ const VideoCard = ({_id,title, thumbnail, owner, createdAt, views=0}) => {
     const [error, setError] = useState(false)
   
     useEffect(()=>{
-      (
-        async() =>{
+      if(_id){
+
+        (
+          async() =>{
           try {
             setError(false)
             setLoading(true)
@@ -31,7 +33,8 @@ const VideoCard = ({_id,title, thumbnail, owner, createdAt, views=0}) => {
           }
         }
       )()
-    },[username, userpfp])
+    }
+    },[_id])
 
     return (
         <div onClick={openVideo}

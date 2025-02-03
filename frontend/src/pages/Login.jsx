@@ -17,6 +17,7 @@ const Login = () => {
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
+    const [errorMSG, setErrorMsg] = useState("")
     const [data, setData] = useState({
         email: "",
         password: ""
@@ -34,6 +35,7 @@ const Login = () => {
     //Post data to backend
     const handleLogin = async() => {
         try {
+            setError(false)
             setLoading(true)
             const loginData = {
                 email: data.email, 
@@ -49,6 +51,10 @@ const Login = () => {
             navigate('/')
         } catch (error) {
             setLoading(false)
+            setError(true)
+            if(error.message === "Request failed with status code 404"){
+                setErrorMsg("Invalid Credintials")
+            }
             console.log("Error",error.message);
         } finally {
             setLoading(false)
@@ -75,6 +81,8 @@ const Login = () => {
                         <input type="text" placeholder='*********' required name='password' onChange={handleDataChange} className='border-2 border-green-950 p-2 text-xs mt-3 rounded-4xl w-80' />
                     </div>
                 </div>
+                {error && <p className='text-red-500 text-center mt-3'>{errorMSG}</p>}
+
                 <div className='flex justify-center items-center gap-10 mt-15' >
                     <div onClick={handleLogin} className={`text-xl cursor-pointer font-bold hover:bg-green-300 shadow shadow-green-950 bg-green-400 p-3 rounded-full flex gap-4 justify-between items-center`}>
                         <button className='cursor-pointer' >{loading ? "Wait..":"Login"}  </button>

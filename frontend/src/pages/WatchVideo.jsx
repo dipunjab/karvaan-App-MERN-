@@ -16,6 +16,7 @@ const WatchVideo = () => {
     const [loading, setLoading] = useState(null)
     const [videoData, setVideoData] = useState({})
     const currentUser = useSelector((state) => state.auth.userData);
+    const authentication = useSelector((state) => state.auth.status);
     const curUserId = currentUser?.userData?.data._id
 
     const [videoOwner, setOwner] = useState(null)
@@ -26,7 +27,7 @@ const WatchVideo = () => {
 
     //isLiked Video by user
     useEffect(() => {
-        if (videoId) {
+        if (videoId && authentication) {
             (async () => {
                 try {
                     setLoading(true);
@@ -54,12 +55,10 @@ const WatchVideo = () => {
             async () => {
                 try {
                     setLoading(true)
-                    const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/videos/${videoId}`, {
-                        headers: {
-                            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-                        }
-                    })
+                    const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/videos/${videoId}`)
                     setVideoData(response.data.data)
+                    console.log(response);
+                    
                     setOwner(response.data.data.owner)
                 } catch (error) {
                     setLoading(false)
@@ -107,24 +106,27 @@ const WatchVideo = () => {
     // for likes 
     const [totalLiks, setLikesTotal] = useState(null)
     useEffect(() => {
-        ; (
-            async () => {
-                try {
-                    setLoading(true)
-                    const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/likes/toggle/v/${videoId}`, {
-                        headers: {
-                            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-                        }
-                    })
-                    setLikesTotal(response.data.data.totalLikes)
-                } catch (error) {
-                    setLoading(false)
-                } finally {
-                    setLoading(false)
+        if (authentication) {
+
+            ; (
+                async () => {
+                    try {
+                        setLoading(true)
+                        const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/likes/toggle/v/${videoId}`, {
+                            headers: {
+                                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                            }
+                        })
+                        setLikesTotal(response.data.data.totalLikes)
+                    } catch (error) {
+                        setLoading(false)
+                    } finally {
+                        setLoading(false)
+                    }
                 }
-            }
-        )()
-    }, [isLiked])
+            )()
+        }
+    }, [isLiked, authentication])
 
     const toggleLikeVideo = async () => {
         try {
@@ -146,24 +148,27 @@ const WatchVideo = () => {
 
     // for fetching Comments
     useEffect(() => {
-        ; (
-            async () => {
-                try {
-                    setLoading(true)
-                    const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/comments/v/${videoId}`, {
-                        headers: {
-                            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-                        }
-                    })
-                    setComments(response.data.data.data)
+        if (authentication) {
 
-                } catch (error) {
-                    setLoading(false)
-                } finally {
-                    setLoading(false)
+            ; (
+                async () => {
+                    try {
+                        setLoading(true)
+                        const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/comments/v/${videoId}`, {
+                            headers: {
+                                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                            }
+                        })
+                        setComments(response.data.data.data)
+
+                    } catch (error) {
+                        setLoading(false)
+                    } finally {
+                        setLoading(false)
+                    }
                 }
-            }
-        )()
+            )()
+        }
     }, [])
 
     const handleCommentDeleted = (deletedCommentId) => {
@@ -197,7 +202,7 @@ const WatchVideo = () => {
 
     //isSubscribed by curr user
     useEffect(() => {
-        if (videoOwner) {
+        if (videoOwner && authentication) {
 
             (
                 async () => {
@@ -218,88 +223,93 @@ const WatchVideo = () => {
                 }
             )()
         }
-}, [videoId, videoOwner])
+    }, [videoId, videoOwner])
 
-const toggleSubscription = async () => {
-    try {
-        const response = await axios.post(`${import.meta.env.VITE_API_BACKEND}/subscriptions/c/${videoOwner}`, {}, {
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+    const toggleSubscription = async () => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_BACKEND}/subscriptions/c/${videoOwner}`, {}, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                }
+            });
+            if (response.data.message === "Successfully subscribed the channel.") {
+                setSubscribed(true);
+            } else {
+                setSubscribed(false)
             }
-        });        
-        if (response.data.message === "Successfully subscribed the channel.") {
-            setSubscribed(true);
-        } else {
-            setSubscribed(false)
+
+        } catch (error) {
+            console.error("Error toggling like:", error);
         }
+    };
 
-    } catch (error) {
-        console.error("Error toggling like:", error);
-    }
-};
+    return (
+        <div className='ml-8 flex lg:flex-row flex-col gap-10'>
+            <div className='flex flex-col'>
+                <VideoPlayer videoSrc={videoData.videoFile} />
+                <h1 className='mt-4 text-3xl font-medium'>{videoData.title}</h1>
+                <p className='mt-2 text-[12px] md:text-[15px] lg:w-[720px]'>{videoData.description}</p>
+                <div className='flex justify-start items-center gap-20'>
+                    <h1 className='mt-2 font-medium text-gray-500'>Views: {videoData.views}</h1>
+                    <p>{new Date(videoData.createdAt).toDateString()}</p>
+                    {authentication &&
+                        <div className='flex justify-center items-center mt-2 gap-4' onClick={toggleLikeVideo}>
 
-return (
-    <div className='ml-8 flex lg:flex-row flex-col gap-10'>
-        <div className='flex flex-col'>
-            <VideoPlayer videoSrc={videoData.videoFile} />
-            <h1 className='mt-4 text-3xl font-medium'>{videoData.title}</h1>
-            <p className='mt-2 text-[12px] md:text-[15px] lg:w-[720px]'>{videoData.description}</p>
-            <div className='flex justify-start items-center gap-20'>
-                <h1 className='mt-2 font-medium text-gray-500'>Views: {videoData.views}</h1>
-                <p>{new Date(videoData.createdAt).toDateString()}</p>
-
-                <div className='flex justify-center items-center mt-2 gap-4' onClick={toggleLikeVideo}>
-
-                    {
-                        isLiked ?
-                            <AiFillLike color='green' size={30} className='cursor-pointer' />
-                            :
-                            <SlLike color='green' className='cursor-pointer' size={30} />
-                    }
-                    <h2 className='text-[12px] text-green-700 font-semibold'>{totalLiks}</h2>
-                </div>
-            </div>
-
-            <div className='flex mt-4 justify-between items-center p-1'>
-                <div className='flex w-10 h-10 mb-2 shadow shadow-gray-500 rounded-[50px]'>
-                    <img src={userpfp} alt="profileIcon" className='rounded-[50px]' />
-                    <h2 className='ml-2 mt-2 font-extralight text-[14px] text-gray-600'>{username}</h2>
-                </div>
-                <div className='mb-2'>
-                    {!userChannel ?
-                        (<div onClick={toggleSubscription}>
-                        <SubscribedButton iSubscribed={isSubscribed} />
-                        </div>)
-                        : null}
-
-                </div>
-            </div>
-        </div>
-        {/* Comments of the video */}
-        <div className='lg:overflow-y-hidden lg:w-[420px] p-3  bg-gray-100 shadow-green-200 shadow drop-shadow-md rounded-4xl lg:rounded-2xl lg:h-[calc(100vh-7rem)]'>
-            <div className='flex justify-start items-center gap-3'>
-                <h1 className='text-center font-semibold text-2xl'>Comments .</h1>
-                <p className='font-light text-[23px]'>({comments.length})</p>
-            </div>
-            <div className='flex justify-between items-center bg-white mb-3 mt-2 rounded-4xl p-2 focus:none'>
-                <input type="text" placeholder='Your Comment' className='focus:outline-none w-[280px]' value={addComment} onChange={(e) => setAddComment(e.target.value)} />
-                <GoPaperAirplane onClick={handleAddComment} />
-            </div>
-            <div className='lg:overflow-y-scroll lg:h-[calc(100vh-14rem)]'>
-                <div className='lg:mr-2'>
-                    {comments.length > 0 ? comments.map((comment) => (
-                        <div key={comment._id}>
-                            <CommentCard {...comment} onCommentDeleted={handleCommentDeleted}
-                            />
+                            {
+                                isLiked ?
+                                    <AiFillLike color='green' size={30} className='cursor-pointer' />
+                                    :
+                                    <SlLike color='green' className='cursor-pointer' size={30} />
+                            }
+                            <h2 className='text-[12px] text-green-700 font-semibold'>{totalLiks}</h2>
                         </div>
-                    ))
-                        : <>No Comments</>}
+                    }
+                </div>
+
+                <div className='flex mt-4 justify-between items-center p-1'>
+                    <div className='flex w-10 h-10 mb-2 shadow shadow-gray-500 rounded-[50px]'>
+                        <img src={userpfp} alt="profileIcon" className='rounded-[50px]' />
+                        <h2 className='ml-2 mt-2 font-extralight text-[14px] text-gray-600'>{username}</h2>
+                    </div>
+                    {authentication &&
+                        <div className='mb-2'>
+                            {!userChannel ?
+                                (<div onClick={toggleSubscription}>
+                                    <SubscribedButton iSubscribed={isSubscribed} />
+                                </div>)
+                                : null}
+
+                        </div>
+                    }
                 </div>
             </div>
-        </div>
+            {/* Comments of the video */}
+            <div className='lg:overflow-y-hidden lg:w-[420px] p-3  bg-gray-100 shadow-green-200 shadow drop-shadow-md rounded-4xl lg:rounded-2xl lg:h-[calc(100vh-7rem)]'>
+                <div className='flex justify-start items-center gap-3'>
+                    <h1 className='text-center font-semibold text-2xl'>Comments .</h1>
+                    <p className='font-light text-[23px]'>({comments.length})</p>
+                </div>
+                {authentication &&
+                    <div className='flex justify-between items-center bg-white mb-3 mt-2 rounded-4xl p-2 focus:none'>
+                        <input type="text" placeholder='Your Comment' className='focus:outline-none w-[280px]' value={addComment} onChange={(e) => setAddComment(e.target.value)} />
+                        <GoPaperAirplane onClick={handleAddComment} />
+                    </div>
+                }
+                <div className='lg:overflow-y-scroll lg:h-[calc(100vh-14rem)]'>
+                    <div className='lg:mr-2'>
+                        {comments.length > 0 ? comments.map((comment) => (
+                            <div key={comment._id}>
+                                <CommentCard {...comment} onCommentDeleted={handleCommentDeleted}
+                                />
+                            </div>
+                        ))
+                            : <>No Comments</>}
+                    </div>
+                </div>
+            </div>
 
-    </div>
-)
+        </div>
+    )
 }
 
 export default WatchVideo
