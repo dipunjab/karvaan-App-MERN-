@@ -230,6 +230,27 @@ const getUserByID = asyncHandler(async (req, res) => {
             users,
             "Current user fetched Successfully"))
 });
+
+const getUserByUsername = asyncHandler(async (req, res) => {
+    const {username} = req.params
+    let found ;
+
+    const users = await User.find({username: username})
+    if (users.length === 0) {
+        found = false
+        throw new ApiError(404, "User not found")
+    } else{
+        found = true
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            {users, userExist: found},
+            "username fetched Successfully"))
+});
+
 const getCurrentUser = asyncHandler(async (req, res) => {
     return res
         .status(200)
@@ -532,5 +553,6 @@ export {
     getUserChannelProfile,
     getWatchHistory,
     clearWatchHistory,
-    getUserByID
+    getUserByID,
+    getUserByUsername
 }
