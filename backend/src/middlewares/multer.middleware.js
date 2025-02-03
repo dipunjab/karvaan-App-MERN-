@@ -1,3 +1,5 @@
+//the problem faced was we can not store it on diskstorage if we are in production so here i found the memory storage
+
 import multer from "multer";
 
 const storage = multer.memoryStorage();

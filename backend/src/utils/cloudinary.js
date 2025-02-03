@@ -11,26 +11,48 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SERCRET
 });
 
+const uploadOnCloudinary = (buffer) => {
+    return new Promise((resolve, reject) => {
+        if (!buffer) {
+            return reject('No file buffer provided');
+        }
 
-const uploadOnCloudinary = async (localFilePath) => {
-    try {
-        if (!localFilePath) return null;
+        // Upload the file directly from the buffer
+        const stream = cloudinary.uploader.upload_stream(
+            { resource_type: "auto" },
+            (error, result) => {
+                if (error) {
+                    console.error("Cloudinary upload failed:", error);
+                    reject("Cloudinary upload failed");
+                } else {
+                    resolve(result);
+                }
+            }
+        );
 
-        //upload the file on cloudinary
-        const response = await cloudinary.uploader.upload(localFilePath, {
-            resource_type: "auto"
-        })
-        //file has been uploaded successfully
-        // console.log("File is uploaded on Cloudinary: ", response.url);
+        // Pipe the buffer to the upload stream
+        stream.end(buffer);
+    });
+};
+
+//since we dont have no localfole as we will be dealing with buffer
+// const uploadOnCloudinary = async (localFilePath) => {
+//     try {
+//         if (!localFilePath) return null;
+
+//         //upload the file on cloudinary
+//         const response = await cloudinary.uploader.upload(localFilePath, {
+//             resource_type: "auto"
+//         })
+//         //file has been uploaded successfully
+//         // console.log("File is uploaded on Cloudinary: ", response.url);
         
-        fs.unlinkSync(localFilePath) //remove the locally save temporary file 
-        return response
+//         return response
 
-    } catch (error) {
-        fs.unlinkSync(localFilePath) //remove the locally save temporary file as the upload operation got failed
-        return null;
-    }
-}
+//     } catch (error) {
+//         return null;
+//     }
+// }
 
 const deleteFromCloudinary = async (publicId, type) => {
     try {
