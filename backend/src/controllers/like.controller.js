@@ -218,6 +218,7 @@ const statusOfCommentLikeByUser = asyncHandler(async (req, res) => {
             )
     }
 });
+
 const statusOfTweetLikeByUser = asyncHandler(async (req, res) => {
     const { tweetId } = req.params;
     const like = await Like.findOne({tweet: tweetId,

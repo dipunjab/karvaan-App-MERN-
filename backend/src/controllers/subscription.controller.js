@@ -5,6 +5,37 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import mongoose, { isValidObjectId } from "mongoose"
 
 
+//check if user has subscribed 
+const statusOfChannelSubByUser = asyncHandler(async (req, res) => {
+    const { channelId } = req.params;
+
+    const checkSub = await Subscription.findOne({
+        subscriber: req.user._id,
+        channel: channelId    });
+
+    if (checkSub) {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isSubscribed: true },
+                    "User has subscribed to this channel"
+                )
+            )
+    } else {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    { isSubscribed: false },
+                    "User has not subscribed to this channel"
+                )
+            )
+    }
+});
+
 const toggleSubscription = asyncHandler(async (req, res) => {
     // lets understand what just happened
     // first we will get the channel id it is a userid to whom we are subscribing
@@ -133,5 +164,6 @@ const getSubscribedChannels = asyncHandler(async (req, res) => {
 export {
     toggleSubscription,
     getUserChannelSubscribers,
-    getSubscribedChannels
+    getSubscribedChannels,
+    statusOfChannelSubByUser
 }
