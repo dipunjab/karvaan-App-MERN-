@@ -14,7 +14,10 @@ const SubscribedButton = ({iSubscribed=false}) => {
         }
         </div>
         <h1 className='mr-2 text-green-950'>
-            Hamrah
+            {
+                iSubscribed ? 
+                "Hamrah":"Be Hamrah"
+            }
         </h1>
     </button>
   )

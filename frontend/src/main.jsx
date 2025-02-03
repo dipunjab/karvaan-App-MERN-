@@ -14,7 +14,9 @@ import { Home,
          History,
          WatchVideo,
          Profile,
-         FullTweet
+         FullTweet,
+         Login,
+         Signup
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -64,6 +66,14 @@ const router = createBrowserRouter([
         element: <Profile/>
       }
     ]
+  },
+  {
+    path: "/login",
+    element: <Login/>
+  },
+  {
+    path: "/signup",
+    element: <Signup/>
   }
 ]);
 

@@ -8,6 +8,8 @@ import History from "./History";
 import WatchVideo from "./watchVideo";
 import Profile from "./Profile";
 import FullTweet from "./FullTweet";
+import Login from "./Login";
+import Signup from "./Signup";
 
 export {
     Home,
@@ -19,5 +21,7 @@ export {
     History,
     WatchVideo,
     Profile,
-    FullTweet
+    FullTweet,
+    Login,
+    Signup
 }

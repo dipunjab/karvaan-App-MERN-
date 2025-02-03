@@ -1,12 +1,44 @@
 import { Outlet } from "react-router-dom";
 import Header from "./components/Header/Header";
 import SideBar from "./components/SideBar/SideBar";
+import { useEffect } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login, logout } from "./store/authSlice"
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BACKEND}/users/current-user`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+            }
+          }
+        );
+
+        const userData = response.data;
+                
+        dispatch(login({
+          userData: userData,
+          accessToken: localStorage.getItem('accessToken')
+        }));
+
+      } catch (error) {
+        dispatch(logout());
+      }
+    })();
+  }, []);
+
+
   return (
     <div className="w-full h-screen">
       <div>
-         <Header />
+        <Header />
       </div>
 
       <div className="flex pt-16">

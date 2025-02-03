@@ -1,22 +1,34 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import VideoCard from "../components/videoCard";
-import { fetchVideos } from "../store/videosSlice";
+import axios from "axios";
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const { videos, status, error } = useSelector((state) => state.video);
+  const [videos, setVideos] = useState([])
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchVideos()); 
-    }
-  }, [dispatch, status]);
+
+  
+
+  useEffect(()=>{
+    (
+      async()=>{
+        try {
+          setLoading(true)
+          const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/videos/`)          
+          setVideos(response.data.data.videos)
+        } catch (error) {
+          setLoading(false)
+        } finally{
+          setLoading(false)
+        }
+      }
+    )()
+
+  },[])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 p-4">
-      {status === "loading" && <p>Loading videos...</p>}
-      {status === "failed" && <p>Error loading videos: {error}</p>}
+      {loading && <p>Loading videos...</p>}
       {videos.length > 0 &&
         videos.map((video) => (
           <VideoCard key={video._id} {...video} />

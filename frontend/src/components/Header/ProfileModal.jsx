@@ -10,6 +10,7 @@ const ProfileModal = () => {
 
     const handleLogout = () =>{
         dispatch(logout())
+        localStorage.setItem("accessToken", "")
     }
 
     return (
