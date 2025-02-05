@@ -57,8 +57,6 @@ const WatchVideo = () => {
                     setLoading(true)
                     const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/videos/${videoId}`)
                     setVideoData(response.data.data)
-                    console.log(response);
-                    
                     setOwner(response.data.data.owner)
                 } catch (error) {
                     setLoading(false)
@@ -160,7 +158,7 @@ const WatchVideo = () => {
                             }
                         })
                         setComments(response.data.data.data)
-
+                        
                     } catch (error) {
                         setLoading(false)
                     } finally {
@@ -169,7 +167,7 @@ const WatchVideo = () => {
                 }
             )()
         }
-    }, [])
+    }, [authentication])
 
     const handleCommentDeleted = (deletedCommentId) => {
         setComments(comments.filter(comment => comment._id !== deletedCommentId));
@@ -284,29 +282,34 @@ const WatchVideo = () => {
                 </div>
             </div>
             {/* Comments of the video */}
-            <div className='lg:overflow-y-hidden lg:w-[420px] p-3  bg-gray-100 shadow-green-200 shadow drop-shadow-md rounded-4xl lg:rounded-2xl lg:h-[calc(100vh-7rem)]'>
-                <div className='flex justify-start items-center gap-3'>
-                    <h1 className='text-center font-semibold text-2xl'>Comments .</h1>
-                    <p className='font-light text-[23px]'>({comments.length})</p>
-                </div>
-                {authentication &&
+            {authentication ?
+                <div className='lg:overflow-y-hidden lg:w-[420px] p-3  bg-gray-100 shadow-green-200 shadow drop-shadow-md rounded-4xl lg:rounded-2xl lg:h-[calc(100vh-7rem)]'>
+                    <div className='flex justify-start items-center gap-3'>
+                        <h1 className='text-center font-semibold text-2xl'>Comments .</h1>
+                        <p className='font-light text-[23px]'>({comments.length})</p>
+                    </div>
                     <div className='flex justify-between items-center bg-white mb-3 mt-2 rounded-4xl p-2 focus:none'>
                         <input type="text" placeholder='Your Comment' className='focus:outline-none w-[280px]' value={addComment} onChange={(e) => setAddComment(e.target.value)} />
                         <GoPaperAirplane onClick={handleAddComment} />
                     </div>
-                }
-                <div className='lg:overflow-y-scroll lg:h-[calc(100vh-14rem)]'>
-                    <div className='lg:mr-2'>
-                        {comments.length > 0 ? comments.map((comment) => (
-                            <div key={comment._id}>
-                                <CommentCard {...comment} onCommentDeleted={handleCommentDeleted}
-                                />
-                            </div>
-                        ))
-                            : <>No Comments</>}
+                    <div className='lg:overflow-y-scroll lg:h-[calc(100vh-14rem)]'>
+                        <div className='lg:mr-2'>
+                            {comments.length > 0 ? comments.map((comment) => (
+                                <div key={comment._id}>
+                                    <CommentCard {...comment} onCommentDeleted={handleCommentDeleted}
+                                    />
+                                </div>
+                            ))
+                                : <>No Comments</>}
+                        </div>
                     </div>
                 </div>
-            </div>
+                : (
+                    <div className='flex justify-start items-center gap-3'>
+                        <h1 className='text-center font-semibold text-2xl'>Login To See Comments.</h1>
+                    </div>
+                )
+            }
 
         </div>
     )

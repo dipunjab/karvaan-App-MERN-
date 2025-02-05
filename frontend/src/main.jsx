@@ -14,7 +14,6 @@ import { Home,
          History,
          WatchVideo,
          Profile,
-         FullTweet,
          Login,
          Signup
          } from "./pages/index.js"
@@ -56,10 +55,6 @@ const router = createBrowserRouter([
       {
         path: "/watchvideo/:videoId",
         element: <WatchVideo/>
-      },
-      {
-        path: "/fulltweet/:tweetId",
-        element: <FullTweet/>
       },
       {
         path: "/profile",

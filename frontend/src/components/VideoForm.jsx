@@ -50,7 +50,7 @@ const VideoForm = ({ closeForm }) => {
       </div>
 
       <div className='flex justify-center items-center gap-20'>
-        <button className='bg-green-600 hover:bg-green-400 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-800' onClick={handleUpload}>Upload</button>
+        <button className='bg-green-600 hover:bg-green-400 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-800' onClick={'handleUpload'}>Upload</button>
         <button className='bg-green-300 hover:bg-green-200 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-500' onClick={closeForm}>Cancel</button>
       </div>
 

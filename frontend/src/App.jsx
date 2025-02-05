@@ -11,7 +11,6 @@ function App() {
   const authentication = useSelector((state) => state.auth.status);
 
   useEffect(() => {
-    if(authentication){
       (async () => {
         try {
           const response = await axios.get(
@@ -25,7 +24,6 @@ function App() {
           );
           
           const userData = response.data;
-          
           dispatch(login({
             userData: userData,
             accessToken: localStorage.getItem('accessToken')
@@ -35,7 +33,7 @@ function App() {
           dispatch(logout());
         }
       })();
-    }
+    
   }, []);
 
 
@@ -50,7 +48,7 @@ function App() {
           <SideBar />
         </aside>
 
-        <main className="ml-16 sm:ml-52 w-full h-[calc(100vh-4rem)] overflow-y-auto p-6 sm:p-1">
+        <main className="ml-12 sm:ml-52 w-full h-[calc(100vh-4rem)] overflow-y-auto p-6 sm:p-1">
           <Outlet />
         </main>
       </div>
