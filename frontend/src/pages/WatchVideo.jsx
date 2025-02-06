@@ -230,11 +230,8 @@ const WatchVideo = () => {
                     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
-            if (response.data.message === "Successfully subscribed the channel.") {
-                setSubscribed(true);
-            } else {
-                setSubscribed(false)
-            }
+            setSubscribed(prev => !prev);  
+
 
         } catch (error) {
             console.error("Error toggling like:", error);

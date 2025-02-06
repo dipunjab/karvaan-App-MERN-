@@ -140,8 +140,7 @@ const TweetsCard = ({ tweet, isSubscribed, toggleSubscription, tweetDeleted }) =
                                 "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                             }
                         })
-                        setTweetComments(response.data.data.data)
-
+                        setTweetComments(response.data.data.data)                        
                     } catch (error) {
                         setLoading(false)
                     } finally {

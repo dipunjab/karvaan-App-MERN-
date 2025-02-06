@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import ButtonVideoCard from '../components/ButtonVideoCard'
 import { useDispatch, useSelector } from 'react-redux'
+import VideoCard from '../components/VideoCard';
 
 const History = () => {
 
@@ -24,7 +24,7 @@ const History = () => {
                 {
                     getHistory.map((video) => (
                         <div key={video.title}>
-                            <ButtonVideoCard {...video}/>
+                            <VideoCard {...video}/>
                         </div>
                     ))
                 }
