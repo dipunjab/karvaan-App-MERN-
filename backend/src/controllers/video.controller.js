@@ -57,14 +57,14 @@ const publishAVideo = asyncHandler(async (req, res) => {
         throw new ApiError(404, "All Fields are required.")
     }
 
-    const videoFile = req.files?.videoFile[0].path
+    const videoFile = req.files?.videoFile[0].buffer
 
 
     if (!videoFile) {
         throw new ApiError(404, "Video File is required.")
     }
 
-    const thumbnailFile = req.files?.thumbnail[0].path
+    const thumbnailFile = req.files?.thumbnail[0].buffer
     if (!thumbnailFile) {
         throw new ApiError(404, "thumbnail File is required.")
     }
