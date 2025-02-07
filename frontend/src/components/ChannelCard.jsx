@@ -67,15 +67,15 @@ const ChannelCard = ({ _id, username, fullname, avatar }) => {
     },[isSubscribed])
 
     return (
-        <div className='mt-4 p-2 bg-white shadow drop-shadow-sm shadow-green-100 rounded-full flex justify-between items-center'>
+        <div className='mt-4 p-1 md:p-2  bg-white shadow drop-shadow-sm shadow-green-100 rounded-full flex justify-between items-center'>
             <div className='flex justify-start items-center'>
                 <div className='w-20 h-20 md:w-30 md:h-30 rounded-full'>
-                    <img src={avatar} alt="" className='rounded-full' />
+                    <img src={avatar} alt="" className='rounded-full w-15 h-15 md:w-30 md:h-30 mt-3 sm:mt-1' />
                 </div>
-                <div className='ml-2 text-start'>
-                    <h2 className='text-[20px] font-semibold'>{fullname}</h2>
-                    <p className='text-[12px] font-medium text-gray-500'>@{username}</p>
-                    <p className='text-[10px] font-light text-gray-400'>Subscribers: {totalSubscriber}</p>
+                <div className='sm:ml-2 text-start'>
+                    <h2 className='text-[15px] sm:text-[20px] font-semibold'>{fullname}</h2>
+                    <p className=' text-[10px] sm:text-[12px] font-medium text-gray-500'>@{username}</p>
+                    <p className=' text-[8px] sm:text-[10px] font-light text-gray-400'>Subscribers: {totalSubscriber}</p>
                 </div>
             </div>
             <div onClick={toggleSubscription}>

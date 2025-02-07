@@ -8,9 +8,9 @@ const VideoForm = ({ closeForm }) => {
   const [error, setError] = useState(false);
   const [errorMSG, setErrorMSG] = useState(null);
 
-  const [videoFile, setVideoFile] = useState(null)
+  const [videoFile, setVideoFile] = useState("")
   const [videoFileSize, setVideoFileSize] = useState("")
-  const [thumbnail, setThumbnail] = useState(null)
+  const [thumbnail, setThumbnail] = useState("")
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
@@ -24,7 +24,7 @@ const VideoForm = ({ closeForm }) => {
     const fileSizeMB = file.size / (1024 * 1024); // Convert bytes to MB
     if (fileSizeMB > 4.5) {
       setVideoFileSize("File size exceeds the 4.5MB limit. Please upload a smaller video.");
-      setVideoFile(null)
+      setVideoFile("")
       return;
     }
     setVideoFile(file)
@@ -97,12 +97,12 @@ const VideoForm = ({ closeForm }) => {
           <div className='md:flex-row flex-col'>
             <label htmlFor="videoFile" className='text-[20px] font-semibold mr-10 text-green-950'>Video File</label>
              <p className='text-green-500 text-[8px]'>"File size should be less then 4.5MB</p> 
-            <input type="file" accept="video/*" className='bg-white p-2 w-[250px] md:w-[300px]' value={videoFile} name='videoFile' onChange={handleVideoFile} />
+            <input type="file" accept="video/*" className='bg-white p-2 w-[250px] md:w-[300px]'  name='videoFile' onChange={handleVideoFile} />
             {videoFileSize.length > 0 && <p className='text-green-600'>{videoFileSize}</p>}
           </div>
           <div className='mt-3 md:flex-row flex-col'>
             <label htmlFor="thumbnail" className='text-[20px] font-semibold mr-8 text-green-950'>Thumbnail</label>
-            <input type="file" accept="image/*" className='bg-white p-2 w-[250px] md:w-[300px]' value={thumbnail} name='thumbnail' onChange={handleThumbnail} />
+            <input type="file" accept="image/*" className='bg-white p-2 w-[250px] md:w-[300px]'  name='thumbnail' onChange={handleThumbnail} />
           </div>
         </div>
       </div>

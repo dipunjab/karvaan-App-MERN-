@@ -55,7 +55,11 @@ const WatchVideo = () => {
             async () => {
                 try {
                     setLoading(true)
-                    const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/videos/${videoId}`)
+                    const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/videos/${videoId}`, {
+                        headers: {
+                            "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+                        }
+                    })
                     setVideoData(response.data.data)
                     setOwner(response.data.data.owner)
                 } catch (error) {
@@ -65,7 +69,7 @@ const WatchVideo = () => {
                 }
             }
         )()
-    }, [videoId])
+    }, [])
 
     //for fetching video owner 
     const [username, setUsername] = useState("")

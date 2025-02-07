@@ -16,7 +16,6 @@ const VideoCard = ({_id,title, thumbnail, owner, createdAt, views=0}) => {
   
     useEffect(()=>{
       if(_id){
-
         (
           async() =>{
           try {
