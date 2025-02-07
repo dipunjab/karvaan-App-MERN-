@@ -100,13 +100,15 @@ const publishAVideo = asyncHandler(async (req, res) => {
 const getVideoById = asyncHandler(async (req, res) => {
     const { videoId } = req.params
 
-    
-    await User.findByIdAndUpdate(
+ await User.findByIdAndUpdate(
         req.user?._id,
         {
             $addToSet: {
                 watchHistory: videoId
             }
+        },
+        {
+            new: true
         }
     )
     
