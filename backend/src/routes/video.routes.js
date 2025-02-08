@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
     deleteVideo,
     getAllVideos,
+    getCurrUserVideos,
     getVideoById,
     publishAVideo,
     togglePublishStatus,
@@ -14,11 +15,16 @@ import {upload} from "../middlewares/multer.middleware.js"
 const router = Router();
 
 router.route("/").get(getAllVideos)
+
+//as xpress will read from top to bottom so when i pt this under 3rd route the uservideos will be read as videoId
+router.route("/uservideos").get(verifyJWT,getCurrUserVideos)
+
 router
     .route("/:videoId")
     .get(verifyJWTOptional,getVideoById)
 
 router.use(verifyJWT); // Apply verifyJWT middleware to all routes in this file
+
 
 router
     .route("/")

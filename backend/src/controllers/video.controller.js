@@ -49,6 +49,27 @@ const getAllVideos = asyncHandler(async (req, res) => {
             "All videos fetched"))
 });
 
+const getCurrUserVideos = asyncHandler(async (req, res) => {
+
+    const user = await User.findById(req.user._id)
+    if (!user) {
+        throw new ApiError(400, "Unauthorized request")
+    }
+    
+    const videos = await Video.find({owner: req.user._id});
+
+    if (!videos) {
+        throw new ApiError(404, "User Videos not found")
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(
+            200,
+            videos,
+            "All videos fetched"))
+});
+
 const publishAVideo = asyncHandler(async (req, res) => {
     const { title, description } = req.body
     if (
@@ -100,7 +121,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
 const getVideoById = asyncHandler(async (req, res) => {
     const { videoId } = req.params
 
- await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
         req.user?._id,
         {
             $addToSet: {
@@ -111,7 +132,7 @@ const getVideoById = asyncHandler(async (req, res) => {
             new: true
         }
     )
-    
+
     await Video.findByIdAndUpdate(
         videoId,
         {
@@ -276,5 +297,6 @@ export {
     getVideoById,
     updateVideo,
     deleteVideo,
-    togglePublishStatus
+    togglePublishStatus,
+    getCurrUserVideos
 }
