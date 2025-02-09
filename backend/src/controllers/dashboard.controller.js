@@ -1,21 +1,21 @@
 import mongoose from "mongoose"
 import {Video} from "../models/video.model.js"
-import {Subscription} from "../models/subscription.model.js"
-import {Like} from "../models/like.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
+import { User } from "../models/user.model.js"
 
 const getChannelStats = asyncHandler(async (req, res) => {
-    const userId = req.user._id
-    if(!userId){
-        throw new ApiError(400, "Unauthorizedd request")
+    const {userId} = req.params
+    const user = await User.findById(userId)
+    if(!user){
+        throw new ApiError(400, "User not found")
     }
 
     const channelStats = await Video.aggregate([
         {
             $match: {
-                owner: userId
+                owner: new mongoose.Types.ObjectId(userId)
             }
         },
         {
