@@ -15,7 +15,7 @@ const ProfileButton = () => {
     const userDataPF = useSelector((state) => state.auth.userData)
 
     const avatar =  userDataPF?.userData.data?.avatar
-    console.log();
+
     
     const navigate = useNavigate()
 
