@@ -8,7 +8,7 @@ import CommentCard from './CommentCard';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const TweetsCard = ({ tweet, isSubscribed, toggleSubscription, tweetDeleted }) => {
+const TweetsCard = ({ tweet, isSubscribed, toggleSubscription, tweetDeleted, hideInput }) => {
     const [isLiked, setLiked] = useState(false)
     const [comments, setComments] = useState(false)
     const [loading, setLoading] = useState(false)

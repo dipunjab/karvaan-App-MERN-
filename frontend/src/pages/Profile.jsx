@@ -39,6 +39,8 @@ const Profile = () => {
   const [prePfp, setprePfp] = useState(null);
   const [preCover, setpreCover] = useState(null);
 
+    const [totalSubscriber, setSub] = useState(0);
+
   useEffect(() => {
     dispatch(closeModal());
     if (userId) {
@@ -47,9 +49,6 @@ const Profile = () => {
           setLoading(true);
           const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/users/userbyid/${userId}`);
           setUsername(response.data.data.username);
-          setUserPfp(response.data.data.avatar);
-          setCoverImage(response.data.data.coverImage);
-          setFullname(response.data.data.fullname);
           setUserChannel(curUserId && userId === curUserId);
         } catch (error) {
           console.error(error);
@@ -60,22 +59,30 @@ const Profile = () => {
     }
   }, [currentUser]);
 
-
-
-  // Get subscriber count
-  const [totalSubscriber, setSub] = useState(0);
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_API_BACKEND}/subscriptions/c/${userId}`, {
-          headers: { "Authorization": `Bearer ${localStorage.getItem("accessToken")}` }
-        });
-        setSub(res.data.data.length);
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-  }, [userId]);
+    if (username) {
+      (async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/users/c/${username}`,{
+            headers: {
+              "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
+            }
+          });
+          const data = response.data.data
+          setUserPfp(data.avatar)
+          setFullname(data.fullname)
+          setSub(data.subscribersCount)
+          setCoverImage(data.coverImage)
+
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      })();
+    }
+  }, [username]);
 
 
   const handlePfpChange = (e) => {
@@ -160,7 +167,7 @@ const Profile = () => {
   };
 
   return (
-    <div className='ml-2 sm:ml-10 mt-6 sm:mt-1'>
+    <div className='mt-6 sm:mt-1'>
       <div className='relative'>
         {/* Cover Image */}
         <div className='rounded-2xl shadow-sm shadow-green-200 w-full h-[270px]'>
@@ -186,21 +193,21 @@ const Profile = () => {
           )}
           <div>
             <h1 className='font-bold text-2xl '>{fullname}</h1>
-            <div className='flex flex-col sm:flex-row items-center justify-center sm:gap-5'>
+            <div className='flex flex-col md:flex-row items-center justify-center sm:gap-5'>
               <h2 className='font-medium text-gray-400 md:text-[15px]'>@{username}</h2>
-              <hr className='text-green-800 w-2' />
+              <hr className='text-green-800 w-2 md:block hidden' />
               <h3 className='text-green-900 font-medium text-[15px]'>Subscribers: {totalSubscriber}</h3>
             </div>
           </div>
         </div>
       </div>
 
-      <div className='mt-7 sm:mt-20 flex justify-evenly items-center overflow-x-hidden'>
+      <div className='mt-7 sm:mt-20 flex justify-between items-center overflow-x-hidden'>
         {["Videos", "Playlists", "Tweets", "Channel Stats"].map((tab) => (
           <h1
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`cursor-pointer text-[12px] sm:text-lg font-semibold px-4 py-1 transition-all ${activeTab === tab ? "text-green-700 border-b-2 border-green-700" : "text-gray-500"
+            className={`cursor-pointer text-[12px] sm:text-[16px] font-semibold px-4 py-1 transition-all ${activeTab === tab ? "text-green-700 border-b-2 border-green-700" : "text-gray-500"
               }`}
           >
             {tab}
@@ -208,11 +215,11 @@ const Profile = () => {
         ))}
       </div>
 
-      <div className='absolute mt-6 p-4 h-[600px] sm:h-[500px] grid grid-cols-1 lg:grid-cols-4 gap-3 overflow-y-scroll'>
-        {activeTab === "Videos" && <UserVideos />}
-        {activeTab === "Playlists" && <UserPlaylist />}
-        {activeTab === "Tweets" && <UserTweets />}
-        {activeTab === "Channel Stats" && <ChannelStats />}
+      <div className='absolute mt-6 p-5 h-[600px] sm:h-[500px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-x-hidden  overflow-y-auto'>
+        {activeTab === "Videos" && <UserVideos userId={userId}/>}
+        {activeTab === "Playlists" && <UserPlaylist userId={userId}/>}
+        {activeTab === "Tweets" && <UserTweets userId={userId}/>}
+        {activeTab === "Channel Stats" && <ChannelStats userId={userId}/>}
       </div>
 
       {/* PFP Modal */}

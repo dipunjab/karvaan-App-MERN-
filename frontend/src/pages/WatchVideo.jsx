@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import VideoPlayer from '../components/VideoPlayer';
 import SubscribedButton from '../components/SubscribedButton';
 import { SlLike } from "react-icons/sl";
@@ -241,6 +241,11 @@ const WatchVideo = () => {
             console.error("Error toggling like:", error);
         }
     };
+    const navigate = useNavigate()
+
+    const navToProfile = ()=>{
+        navigate(`/profile/${videoOwner}`)
+      }
 
     return (
         <div className='ml-8 flex lg:flex-row flex-col gap-10'>
@@ -266,7 +271,7 @@ const WatchVideo = () => {
                 </div>
 
                 <div className='flex mt-4 justify-between items-center p-1'>
-                    <div className='flex w-10 h-10 mb-2 shadow shadow-gray-500 rounded-[50px]'>
+                    <div className='flex w-10 h-10 mb-2 shadow shadow-gray-500 rounded-[50px]' onClick={navToProfile}>
                         <img src={userpfp} alt="profileIcon" className='rounded-[50px]' />
                         <h2 className='ml-2 mt-2 font-extralight text-[14px] text-gray-600'>{username}</h2>
                     </div>
