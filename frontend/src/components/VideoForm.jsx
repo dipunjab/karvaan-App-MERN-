@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import lodainggif from "../assets/Loading.gif"
 
 const VideoForm = ({ closeForm }) => {
   const navigate = useNavigate()
@@ -111,7 +112,11 @@ const VideoForm = ({ closeForm }) => {
         <button className='bg-green-600 hover:bg-green-400 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-800' onClick={uploadVideo}>{loading ? "Uploading...": "Upload"}</button>
         <button className='bg-green-300 hover:bg-green-200 cursor-pointer p-3 rounded-full font-bold shadow drop-shadow-lg shadow-green-500' onClick={closeForm}>Cancel</button>
       </div>
-
+{loading && (
+                <div className='fixed top-[50%] left-[50%]'>
+                <img src={lodainggif} className='md:w-40 w-20'/>
+            </div>
+            )}
     </div>
 
   )

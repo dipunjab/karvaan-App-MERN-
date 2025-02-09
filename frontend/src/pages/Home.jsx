@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import VideoCard from "../components/videoCard";
 import axios from "axios";
+import lodainggif from "../assets/Loading.gif"
 
 const Home = () => {
   const [videos, setVideos] = useState([])
@@ -33,6 +34,11 @@ const Home = () => {
         videos.map((video) => (
           <VideoCard key={video._id} {...video} />
         ))}
+        {loading && (
+                <div className='fixed top-[50%] left-[50%]'>
+                <img src={lodainggif} className='md:w-40 w-20'/>
+            </div>
+            )}
     </div>
   );
 };

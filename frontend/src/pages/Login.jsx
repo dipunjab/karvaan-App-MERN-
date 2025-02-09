@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {login} from "../store/authSlice"
 import { useDispatch } from 'react-redux';
+import lodainggif from "../assets/Loading.gif"
 
 const Login = () => {
     const navigate = useNavigate()
@@ -52,7 +53,7 @@ const Login = () => {
         } catch (error) {
             setLoading(false)
             setError(true)
-            if(error.message === "Request failed with status code 404"){
+            if(error.message === "Request failed with status code 401"){
                 setErrorMsg("Invalid Credintials")
             }
             console.log("Error",error.message);
@@ -97,6 +98,11 @@ const Login = () => {
                     <Link to="/" >Continue Without Account</Link>
                 </div>
             </div>
+            {loading && (
+                <div className='fixed top-[50%] left-[50%]'>
+                <img src={lodainggif} className='md:w-40 w-20'/>
+            </div>
+            )}
         </div>
     )
 }

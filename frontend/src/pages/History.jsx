@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import VideoCard from '../components/VideoCard';
 import axios from 'axios';
+import lodainggif from "../assets/Loading.gif"
 
 const History = () => {
     const [videos, setVideos] = useState([])
+    const [loading, setloading] = useState(false)
 
     useEffect(() => {
         ; (
             async () => {
+                setloading(true)
                 try {
                     const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/users/watch-history`, {
                         headers: {
@@ -18,8 +21,10 @@ const History = () => {
                     setVideos(response.data.data)
 
                 } catch (error) {
+                    setloading(false)
                     console.log(error);
-
+                } finally {
+                    setloading(false)
                 }
             }
         )()
@@ -62,6 +67,11 @@ const History = () => {
                 ): <p>Cleared History</p>
                 }
             </div>
+            {loading && (
+                <div className='fixed top-[50%] left-[50%]'>
+                <img src={lodainggif} className='md:w-40 w-20'/>
+            </div>
+            )}
         </div>
     )
 }

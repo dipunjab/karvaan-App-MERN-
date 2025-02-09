@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from "react";
 import VideoCard from "../components/VideoCard";
 import axios from "axios";
+import lodainggif from "../assets/Loading.gif"
 
 const LikedVideos = () => {
   const [likedVideos, setLikedVideos] = useState([])
+  const [loading, setloading] = useState(false)
 
   useEffect(() => {
     ; (
       async () => {
         try {
+          setloading(true)
           const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/likes/videos/`, {
             headers: {
               "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
-            
-          });
-          setLikedVideos(response.data.data);          
-        } catch (error) {
 
+          });
+          setLikedVideos(response.data.data);
+        } catch (error) {
+          setloading(false)
+        } finally{
+          setloading(false)
         }
       }
     )()
@@ -39,6 +44,11 @@ const LikedVideos = () => {
           </div>
         ))}
       </div>
+      {loading && (
+        <div className='fixed top-[50%] left-[50%]'>
+          <img src={lodainggif} className='md:w-40 w-20' />
+        </div>
+      )}
     </div>
   );
 };

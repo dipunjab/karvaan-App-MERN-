@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import TweetsCard from '../components/TweetsCard'
 import axios from 'axios'
+import lodainggif from "../assets/Loading.gif"
 
 
 const Tweets = () => {
   const [tweets, setTweets] = useState([])
 
   const [subscriptions, setSubscriptions] = useState({});  
+  const [loading, setloading] = useState(false)
 
   useEffect(() => {
     const fetchSubscriptions = async () => {
@@ -57,12 +59,15 @@ const handletweetDeleted = (deletedtweetId) => {
   useEffect(() => {
     ; (
       async () => {
-        const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/tweets`, {
-          headers: {
-            Authorization: localStorage.getItem('accessToken')
-          }
-        })
-        setTweets(response.data.data.tweets)
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/tweets`, {
+            headers: {
+              Authorization: localStorage.getItem('accessToken')
+            }
+          })
+          setTweets(response.data.data.tweets)
+        } catch (error) {
+        } 
       }
     )()
   }, [tweets])
@@ -80,9 +85,14 @@ const handletweetDeleted = (deletedtweetId) => {
                tweetDeleted={handletweetDeleted}
                 toggleSubscription={() => toggleSubscription(tweet.owner)} />
             </div>
-          ))) : <h2>No Tweets Found</h2>
+          ))) : null
         }
       </div>
+      {loading && (
+              <div className='fixed top-[50%] left-[50%]'>
+                <img src={lodainggif} className='md:w-40 w-20' />
+              </div>
+            )}
     </div>
   )
 }

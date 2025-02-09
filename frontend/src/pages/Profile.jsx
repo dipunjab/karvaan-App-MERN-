@@ -11,6 +11,7 @@ import {
   ChannelStats
 } from "../components/ProfilePageComponents/index";
 import { updateUserPFP, login, logout } from '../store/authSlice';
+import lodainggif from "../assets/Loading.gif"
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const Profile = () => {
   const [prePfp, setprePfp] = useState(null);
   const [preCover, setpreCover] = useState(null);
 
-    const [totalSubscriber, setSub] = useState(0);
+  const [totalSubscriber, setSub] = useState(0);
 
   useEffect(() => {
     dispatch(closeModal());
@@ -64,7 +65,7 @@ const Profile = () => {
       (async () => {
         try {
           setLoading(true);
-          const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/users/c/${username}`,{
+          const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/users/c/${username}`, {
             headers: {
               "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
             }
@@ -216,10 +217,10 @@ const Profile = () => {
       </div>
 
       <div className='absolute mt-6 p-5 h-[600px] sm:h-[500px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 overflow-x-hidden  overflow-y-auto'>
-        {activeTab === "Videos" && <UserVideos userId={userId}/>}
-        {activeTab === "Playlists" && <UserPlaylist userId={userId}/>}
-        {activeTab === "Tweets" && <UserTweets userId={userId}/>}
-        {activeTab === "Channel Stats" && <ChannelStats userId={userId}/>}
+        {activeTab === "Videos" && <UserVideos userId={userId} />}
+        {activeTab === "Playlists" && <UserPlaylist userId={userId} />}
+        {activeTab === "Tweets" && <UserTweets userId={userId} />}
+        {activeTab === "Channel Stats" && <ChannelStats userId={userId} />}
       </div>
 
       {/* PFP Modal */}
@@ -245,6 +246,12 @@ const Profile = () => {
             <button className="bg-green-600 text-white px-4 py-2 rounded-lg mr-2" onClick={saveCover}>Save</button>
             <button className="bg-gray-500 text-white px-4 py-2 rounded-lg" onClick={() => setShowCoverModal(false)}>Close</button>
           </div>
+        </div>
+      )}
+
+      {loading && (
+        <div className='fixed top-[50%] left-[50%]'>
+          <img src={lodainggif} className='md:w-40 w-20' />
         </div>
       )}
     </div>

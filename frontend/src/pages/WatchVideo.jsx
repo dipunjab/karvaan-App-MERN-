@@ -5,6 +5,7 @@ import VideoPlayer from '../components/VideoPlayer';
 import SubscribedButton from '../components/SubscribedButton';
 import { SlLike } from "react-icons/sl";
 import { AiFillLike } from "react-icons/ai";
+import lodainggif from "../assets/Loading.gif"
 
 import CommentCard from '../components/CommentCard';
 import { GoPaperAirplane } from 'react-icons/go';
@@ -162,7 +163,7 @@ const WatchVideo = () => {
                             }
                         })
                         setComments(response.data.data.data)
-                        
+
                     } catch (error) {
                         setLoading(false)
                     } finally {
@@ -234,7 +235,7 @@ const WatchVideo = () => {
                     "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
                 }
             });
-            setSubscribed(prev => !prev);  
+            setSubscribed(prev => !prev);
 
 
         } catch (error) {
@@ -243,9 +244,9 @@ const WatchVideo = () => {
     };
     const navigate = useNavigate()
 
-    const navToProfile = ()=>{
+    const navToProfile = () => {
         navigate(`/profile/${videoOwner}`)
-      }
+    }
 
     return (
         <div className='ml-8 flex lg:flex-row flex-col gap-10'>
@@ -316,7 +317,11 @@ const WatchVideo = () => {
                     </div>
                 )
             }
-
+            {loading && (
+                <div className='fixed top-[50%] left-[50%]'>
+                    <img src={lodainggif} className='md:w-40 w-20' />
+                </div>
+            )}
         </div>
     )
 }

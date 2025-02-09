@@ -33,8 +33,8 @@ function App() {
           dispatch(logout());
         }
       })();
-    
-  }, [authentication]);
+    }    
+, []);
 
 
   return (

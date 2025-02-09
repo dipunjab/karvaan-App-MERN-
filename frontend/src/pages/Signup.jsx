@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import cover from "../assets/loginBack.png";
 import { FaPlaneDeparture } from "react-icons/fa";
+import lodainggif from "../assets/Loading.gif"
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -29,21 +30,23 @@ const Signup = () => {
     };
 
     //check for userExistance with username
-    useEffect(()=>{
-        ;(
-            async () => {
+    useEffect(() => {
+        if (username) {
+
+            ; (
+                async () => {
                     setError(false)
                     try {
                         const response = await axios.get(`${import.meta.env.VITE_API_BACKEND}/users/userbyusername/${username}`);
-                        console.log(response);  // Assume backend returns { isAvailable: true/false }
                         setError(true);
                         setErrorMSG("This username is already taken. Please choose another one.");
                     } catch (error) {
                         return false;
                     }
                 }
-        )()
-    },[username])
+            )()
+        }
+    }, [username])
 
     // Register Handler Function
     const handleRegister = async () => {
@@ -68,8 +71,7 @@ const Signup = () => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('Registration successful:', response);
-            navigate('/login');  
+            navigate('/login');
         } catch (error) {
             console.error('Registration failed:', error.response.data);
             setError(true);
@@ -88,9 +90,9 @@ const Signup = () => {
             <div className='bg-white md:w-[50%] md:h-[calc(100vh)] h-[calc(50vh)]'>
                 <h1 className='text-center mt-10 text-4xl font-semibold text-green-950'>Signup</h1>
 
-                <div className='flex justify-center items-center gap-10 mt-5'>
+                <div className='flex justify-center  flex-col md:flex-row items-center gap-10 mt-5'>
                     <div className='flex flex-col items-center gap-2'>
-                        <label htmlFor="avatar" className='font-medium text-xs'>Profile Picture</label>
+                        <label htmlFor="avatar" className='font-medium text-[12px] md:text-xs'>Profile Picture</label>
                         {!profileImage ? (
                             <input type="file" accept='image/*' name='avatar' onChange={handleImageChange} />
                         ) : (
@@ -102,7 +104,7 @@ const Signup = () => {
                     </div>
 
                     <div className='flex flex-col items-center gap-2'>
-                        <label htmlFor="coverImage" className='font-medium text-xs'>Cover Image</label>
+                        <label htmlFor="coverImage" className='font-medium text-[12px] md:text-xs'>Cover Image</label>
                         {!coverImage ? (
                             <input type="file" accept="image/*" name='coverImage' onChange={handleCoverImageChange} />
                         ) : (
@@ -132,7 +134,7 @@ const Signup = () => {
 
                     <div className='flex flex-col mt-5'>
                         <label htmlFor="password" className='font-medium text-xl'>Password</label>
-                        <input type="password" placeholder='*********' value={password} onChange={(e) => setPassword(e.target.value)} className='border-2 border-green-950 p-2 text-xs mt-3 rounded-4xl w-80' />
+                        <input type="text" placeholder='*********' value={password} onChange={(e) => setPassword(e.target.value)} className='border-2 border-green-950 p-2 text-xs mt-3 rounded-4xl w-80' />
                     </div>
                 </div>
 
@@ -152,6 +154,11 @@ const Signup = () => {
                     </div>
                 </div>
             </div>
+            {loading && (
+                <div className='fixed top-[50%] left-[50%]'>
+                <img src={lodainggif} className='md:w-40 w-20'/>
+            </div>
+            )}
         </div>
     );
 };
