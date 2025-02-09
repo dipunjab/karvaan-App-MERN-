@@ -19,6 +19,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
     if (userId) {
         filter.owner = userId
     }
+    // const uservideo = await Video.find({ owner: userId })
+    // console.log(uservideo);
 
     let sort = {}
     sort[sortBy] = sortType === 'asc' ? 1 : -1
@@ -32,7 +34,10 @@ const getAllVideos = asyncHandler(async (req, res) => {
         limit: Number(limit),
     };
 
-    const videos = await Video.aggregatePaginate(aggregate, options);
+    const videos = await Video.find(filter)
+        .sort(sort)
+        .skip((page - 1) * limit)
+        .limit(Number(limit));
     if (!videos) {
         throw new ApiError(404, "Videos not found")
     }
@@ -42,10 +47,11 @@ const getAllVideos = asyncHandler(async (req, res) => {
         .json(new ApiResponse(
             200,
             {
-                videos: videos.docs,
-                CountVideos: videos.totalDocs,
-                totalPages: videos.totalPages
+                videos: videos,
+                CountVideos: videos.length, 
+                totalPages: Math.ceil(videos.length / limit),
             },
+
             "All videos fetched"))
 });
 
@@ -55,8 +61,8 @@ const getCurrUserVideos = asyncHandler(async (req, res) => {
     if (!user) {
         throw new ApiError(400, "Unauthorized request")
     }
-    
-    const videos = await Video.find({owner: req.user._id});
+
+    const videos = await Video.find({ owner: req.user._id });
 
     if (!videos) {
         throw new ApiError(404, "User Videos not found")
