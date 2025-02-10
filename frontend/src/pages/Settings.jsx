@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
+    const [loading, setLoading] = useState(false);
     const [loadingPersonal, setLoadingPersonal] = useState(false);
     const [errorPersonal, setErrorPersonal] = useState(false);
     const [errorMsgPersonal, setErrorMsgPersonal] = useState("");
@@ -53,13 +55,26 @@ const Settings = () => {
         }
     };
 
+    const navigate = useNavigate()
     const [showModal, setModal] = useState(false)
     const confirmDeleteModal = () => {
         setModal(true)
     }
 
     const deleteAccount = async()=>{
-        
+        try {
+            setLoading(true);
+            const res = await axios.delete(`${import.meta.env.VITE_API_BACKEND}/users/delete-account`,
+                { headers: { Authorization: localStorage.getItem('accessToken') } }
+            );
+            console.log(res)
+        } catch (error) {
+            console.log(error.message);
+        } finally {
+            setLoading(false);
+            navigate("/")
+            localStorage.setItem("accessToken", "")
+        }
     }
 
     return (
@@ -116,7 +131,7 @@ const Settings = () => {
                             <p className='text-gray-600 mt-4 text-xs sm:text-xl'>Are you sure you want to delete your account? This action cannot be undone.</p>
                             <div className='mt-6 flex justify-end gap-4'>
                                 <button onClick={() => setModal(false)} className='cursor-pointer px-4 py-2 bg-gray-300 text-gray-700 rounded-lg'>Cancel</button>
-                                <button onClick={deleteAccount} className='px-4 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-800'>Confirm</button>
+                                <button onClick={deleteAccount} className='px-4 py-2 bg-red-600 text-white rounded-lg cursor-pointer hover:bg-red-800' disabled={loading ? true: false}>{loading? "Deleting...": "Delete"}</button>
                             </div>
                         </div>
                     </div>
