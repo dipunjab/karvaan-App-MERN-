@@ -13,7 +13,8 @@ import {
     getWatchHistory,
     clearWatchHistory,
     getUserByID,
-    getUserByUsername
+    getUserByUsername,
+    deleteCurrentUserAccount
 } from "../controllers/user.controller.js"
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -58,6 +59,7 @@ router.route("/userbyusername/:username").get(getUserByUsername)
 router.route("/userbyid/:userId").get(getUserByID);
 router.route("/c/:username").get(verifyJWT, getUserChannelProfile);
 router.route("/watch-history").get(verifyJWT, getWatchHistory).patch(verifyJWT, clearWatchHistory);
+router.route("/delete-account").delete(verifyJWT, deleteCurrentUserAccount).patch(verifyJWT, clearWatchHistory);
 
 
 export default router

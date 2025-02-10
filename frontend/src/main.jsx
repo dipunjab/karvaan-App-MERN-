@@ -18,6 +18,7 @@ import { Home,
          Signup
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Settings from './pages/Settings.jsx'
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
       {
         path: "/profile/:userId",
         element: <Profile/>
+      },
+      {
+        path: "/settings",
+        element: <Settings/>
       }
     ]
   },

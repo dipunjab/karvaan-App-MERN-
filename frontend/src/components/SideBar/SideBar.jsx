@@ -72,7 +72,7 @@ function SideBar() {
         <hr className="w-full mt-10 mb-4 text-gray-300" />
 
         <li className="w-full sm:w-44">
-          <Link to="/" className="flex justify-start items-center gap-4 py-3">
+          <Link to="/settings" className="flex justify-start items-center gap-4 py-3">
             <IoSettings size={25} />
             <h2 className="hidden sm:block font-medium">Settings</h2>
           </Link>

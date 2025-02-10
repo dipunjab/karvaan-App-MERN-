@@ -2,6 +2,14 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js"
 import { User } from "../models/user.model.js"
+import { Video } from "../models/video.model.js"
+import { Comment } from "../models/comment.model.js"
+import { Like } from "../models/like.model.js"
+import { Subscription } from "../models/subscription.model.js"
+import { Tweet } from "../models/tweet.model.js"
+import { Playlist } from "../models/playlist.model.js"
+
+
 import { deleteFromCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js"
 import jwt from "jsonwebtoken"
 import mongoose from "mongoose";
@@ -540,6 +548,26 @@ const clearWatchHistory = asyncHandler(async (req,res) => {
     return res.status(200).json(new ApiResponse(200, history, "History Cleared"))
 });
 
+const deleteCurrentUserAccount = asyncHandler(async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        await Video.deleteMany({ owner: userId });
+        await Tweet.deleteMany({ owner: userId });
+        await Like.deleteMany({ likedBy: userId });
+        await Subscription.deleteMany({ subscriber: userId });
+        await Playlist.deleteMany({ owner: userId });
+        await Comment.deleteMany({ commentBy: userId });
+
+        await User.findByIdAndDelete(userId);
+
+        return res.status(200).json(new ApiResponse(200, null, "Account and all related data deleted successfully."));
+    } catch (error) {
+        return res.status(500).json(new ApiResponse(500, null, "An error occurred while deleting the account."));
+    }
+});
+
+
 export {
     registerUser,
     loginUser,
@@ -554,5 +582,6 @@ export {
     getWatchHistory,
     clearWatchHistory,
     getUserByID,
-    getUserByUsername
+    getUserByUsername,
+    deleteCurrentUserAccount
 }
