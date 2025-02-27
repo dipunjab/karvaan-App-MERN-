@@ -10,6 +10,7 @@ import lodainggif from "../assets/Loading.gif"
 import CommentCard from '../components/CommentCard';
 import { GoPaperAirplane } from 'react-icons/go';
 import axios from 'axios';
+import { FaCopy } from 'react-icons/fa6';
 
 const WatchVideo = () => {
 
@@ -248,6 +249,16 @@ const WatchVideo = () => {
         navigate(`/profile/${videoOwner}`)
     }
 
+    //showMessageOfClickingCopyId
+    const [showCopyIdMsg, setCopyIdMsg] = useState(false)
+    const showMessageOfClickingCopyId = async () => {
+        setTimeout(() => {
+            setCopyIdMsg(false)
+        }, 2000);
+        await navigator.clipboard.writeText(videoId);
+        setCopyIdMsg(true)
+    }
+
     return (
         <div className='ml-8 flex lg:flex-row flex-col gap-10'>
             <div className='flex flex-col'>
@@ -257,18 +268,25 @@ const WatchVideo = () => {
                 <div className='flex justify-start items-center gap-20'>
                     <h1 className='mt-2 font-medium text-gray-500'>Views: {videoData.views}</h1>
                     <p>{new Date(videoData.createdAt).toDateString()}</p>
-                    {authentication &&
-                        <div className='flex justify-center items-center mt-2 gap-4' onClick={toggleLikeVideo}>
-
-                            {
-                                isLiked ?
-                                    <AiFillLike color='green' size={30} className='cursor-pointer' />
-                                    :
-                                    <SlLike color='green' className='cursor-pointer' size={30} />
-                            }
-                            <h2 className='text-[12px] text-green-700 font-semibold'>{totalLiks}</h2>
-                        </div>
-                    }
+                    {authentication && (
+                        <>
+                            <div className='flex justify-center items-center mt-2 gap-4' onClick={toggleLikeVideo}>
+                                {
+                                    isLiked ?
+                                        <AiFillLike color='green' size={30} className='cursor-pointer' />
+                                        :
+                                        <SlLike color='green' className='cursor-pointer' size={30} />
+                                }
+                                <h2 className='text-[12px] text-green-700 font-semibold'>{totalLiks}</h2>
+                            </div>
+                            <div className='cursor-pointer' onClick={showMessageOfClickingCopyId}>
+                                <FaCopy />
+                                {showCopyIdMsg && (
+                                    <p>Video Id Copied</p>
+                                )}
+                            </div>
+                        </>
+                    )}
                 </div>
 
                 <div className='flex mt-4 justify-between items-center p-1'>

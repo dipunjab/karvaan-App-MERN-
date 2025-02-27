@@ -19,6 +19,7 @@ import { Home,
          } from "./pages/index.js"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Settings from './pages/Settings.jsx'
+import PlaylistById from './pages/PlaylistById.jsx'
 
 const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: "/settings",
         element: <Settings/>
+      },
+      {
+        path: "/fullplaylist/:playlistId",
+        element: <PlaylistById/>
       }
     ]
   },
