@@ -1,7 +1,7 @@
 import React from 'react'
 import { CgProfile } from "react-icons/cg";
 import { IoMdLogOut } from "react-icons/io";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import {logout} from "../../store/authSlice"
 
@@ -10,10 +10,12 @@ const ProfileModal = () => {
     const curUserId = currentUser?.userData?.data._id
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleLogout = () =>{
         dispatch(logout())
         localStorage.setItem("accessToken", "")
+        navigate("/")
     }
 
     return (
