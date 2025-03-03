@@ -71,7 +71,7 @@ const WatchVideo = () => {
                 }
             }
         )()
-    }, [])
+    }, [videoId])
 
     //for fetching video owner 
     const [username, setUsername] = useState("")
