@@ -5,7 +5,7 @@ import LikedVideos from "./LikedVideos"
 import Subscriptions from "./Subscriptions"
 import YourVideos from "./YourVideos";
 import History from "./History";
-import WatchVideo from "./watchVideo";
+import WatchVideo from "./WatchVideo";
 import Profile from "./Profile";
 import Login from "./Login";
 import Signup from "./Signup";
