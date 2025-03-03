@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import VideoCard from "../components/videoCard";
+import VideoCard from "../components/VideoCard";
 import axios from "axios";
 import lodainggif from "../assets/Loading.gif"
 
