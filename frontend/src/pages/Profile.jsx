@@ -28,7 +28,7 @@ const Profile = () => {
 
   // User details
   const [username, setUsername] = useState("");
-  const [userpfp, setUserPfp] = useState("");
+  const userpfp = useSelector((state) => state.auth.userData?.userData?.data?.avatar);
   const [coverImage, setCoverImage] = useState("");
   const [fullname, setFullname] = useState("");
 
@@ -71,7 +71,6 @@ const Profile = () => {
             }
           });
           const data = response.data.data
-          setUserPfp(data.avatar)
           setFullname(data.fullname)
           setSub(data.subscribersCount)
           setCoverImage(data.coverImage)
@@ -129,6 +128,7 @@ const Profile = () => {
     formData.append("avatar", newPfp);
 
     try {
+      setLoading(true)
       const res = await axios.patch(`${import.meta.env.VITE_API_BACKEND}/users/update-avatar/`, formData, {
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("accessToken")}`,
@@ -144,6 +144,9 @@ const Profile = () => {
       setShowPfpModal(false);
     } catch (error) {
       console.error("Error updating profile picture:", error);
+      setLoading(false)
+    } finally {
+      setLoading(false)
     }
   };
 
