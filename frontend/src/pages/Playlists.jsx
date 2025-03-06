@@ -39,7 +39,8 @@ const Playlists = () => {
         }
       }
     )()
-  }, [])
+  }, [curUserId])
+
   //creating playlist
   const addPlaylist = async () => {
     try {
