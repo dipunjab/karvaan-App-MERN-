@@ -2,6 +2,8 @@
 
 Karvaan is a full-stack video-sharing platform built using the **MERN stack (MongoDB, Express, React, Node.js)**. It allows users to create accounts, upload videos, create playlists, like/comment on videos, subscribe to other channels, and engage with content just like a modern video platform.
 
+![Karvaan Preview](assets/Frame 1.png)
+
 ## 🚀 Features
 
 ### **User Features**
