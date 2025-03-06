@@ -47,16 +47,16 @@ cd karvaan
 3. Create a `.env` file and configure:
    ```env
    PORT=8000
-MONGODB_URL=
-CORS_ORIGIN=https://karvaan-app-mern.vercel.app/
-ACCESS_TOKEN_SECRET=
-ACCESS_TOKEN_EXPIRY=1d
-REFRESH_TOKEN_SECRET=
-REFRESH_TOKEN_EXPIRY=10d
+   MONGODB_URL=
+   CORS_ORIGIN=https://karvaan-app-mern.vercel.app/
+   ACCESS_TOKEN_SECRET=
+   ACCESS_TOKEN_EXPIRY=1d
+   REFRESH_TOKEN_SECRET=
+   REFRESH_TOKEN_EXPIRY=10d
 
-CLOUDINARY_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SERCRET=
+   CLOUDINARY_NAME=
+   CLOUDINARY_API_KEY=
+   CLOUDINARY_API_SERCRET=
    ```
 4. Start the server:
    ```bash
